@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Registration</title>
+    <link rel="stylesheet" href="reg.css">
+</head>
+<body>
+    <header>
+        <h1>Project Registration</h1>
+    </header>
+    <main>
+        <section id="registration">
+            <h2>REGISTRATION FORM</h2>
+            <form id="registration-form">
+                <div class="form-group">
+                    <label for="projectId">Project Name</label>
+                    <input type="text" id="projectId" name="projectId" placeholder="Enter Project Name" required>
+                </div>
+                <div class="form-group">
+                    <label for="password">Password</label>
+                    <input type="password" id="password" name="password" placeholder="Enter Password" required>
+                </div>
+                <div class="form-group">
+                    <label for="projectId">Role</label>
+                    <input type="text" id="role" name="projectId" placeholder="Please Enter 'project'" required>
+                </div>
+                <button type="submit">Register</button>
+            </form>
+            <div id="responseMessage"></div>
+            <button class="back-button" onclick="goToLogin()">Back to Login</button>
+        </section>
+    </main>
+
+    <script src="reg.js"></script>
+</body>
+</html>

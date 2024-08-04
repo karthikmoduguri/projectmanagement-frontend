@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Project Interface</title>
+    <link rel="stylesheet" href="pmi.css">
+</head>
+<body>
+    <!-- <div id="logout button">
+        <button class="logout" onclick="logout()"><img height="30px"src="https://tse2.mm.bing.net/th?id=OIP.stIsBS4y3qk89iwNWJufYQHaHI&pid=Api&P=0&h=180" alt="logout"></button>
+    </div> -->
+    
+    <div id="header"></div>
+    <div id="content">
+        <div class="button-container">
+        <button class="big-button" id="projectRegistration">Project Registration</button>
+        <button class="big-button" id="projectDetails">Work Progress</button>
+        </div>
+    </div>
+    <div id="confirmation-dialog" class="confirmation-dialog">
+        <p>Are you sure you want to logout?</p>
+        <button onclick="logout()">Yes</button>
+        <button onclick="cancelLogout()">No</button>
+    </div>
+    
+    <script src="pmi.js"></script>
+    <script>
+        // Include the header
+        includeHeader();
+    </script>
+</body>
+</html>

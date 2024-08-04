@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Makerspace Dashboard</title>
+    <link rel="stylesheet" href="hoif.css">
+</head>
+<body>
+    
+    
+    
+    
+    <header>
+        <h1>Makerspace Dashboard</h1>
+        <button id="create-project-btn" onclick="showCreateProjectPage()">Add Project</button>
+        <div id="header"></div>
+    </header>
+    <main>
+        <section id="project-overview">
+            <h2>Ongoing Projects</h2>
+            <div id="projects-grid"></div>
+        </section>
+
+        <section id="project-details" style="display:none;">
+            <button onclick="showOverview()">Back to Overview</button>
+            <h2>Project Details</h2>
+            <div id="details-content"></div>
+            <div id="progress-bar-container" class="progress-container" style="display: none;">
+                <h3>Project Progress</h3>
+                <div class="progress-bar">
+                    <div id="progress-bar" class="progress"></div>
+                </div>
+                <span id="progress-percentage">0%</span>
+            </div>
+        </section>
+
+        <section id="create-project" style="display:none;">
+            <button onclick="showOverview()">Back to Projects</button>
+            <h2>Create Project</h2>
+            <form id="create-project-form" onsubmit="createProject(event)">
+                <label for="project-id">Project ID:</label>
+                <input type="text" id="project-id" name="project-id" placeholder="Enter Project ID" required>
+                
+                <label for="project-title">Project Name:</label>
+                <input type="text" id="project-title" name="project-title" placeholder="Enter Project Title" required>
+                
+                <label for="team-lead">Team Lead:</label>
+                <input type="text" id="team-lead" name="team-lead" placeholder="Enter Team Lead" required>
+                
+                <button type="submit" onclick="add()" >Add Project</button>
+            </form>
+            <div id="responseMessage"></div>
+        </section>
+    </main>
+    <div id="confirmation-dialog" class="confirmation-dialog">
+        <p>Are you sure you want to logout?</p>
+        <button onclick="logout()">Yes</button>
+        <button onclick="cancelLogout()">No</button>
+    </div>
+
+   
+    
+
+    <script src="hoif.js"></script>
+    <script>
+        // Include the header
+        includeHeader();
+    </script>
+</body>
+</html>

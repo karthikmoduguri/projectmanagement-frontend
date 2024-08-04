@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Project Details Registration</title>
+    <link rel="stylesheet" href="mi.css">
+</head>
+<body>
+    
+    
+    <header>
+        <h1>Project Details Registration</h1>
+        <div id="header"></div>
+    </header>
+    <main>
+        <section id="project-details">
+            <h2>Enter Project Details</h2>
+            <form id="project-info-form">
+                <div class="form-group">
+                    <label for="projectId">Project ID</label>
+                    <input type="text" id="projectId" name="projectId" placeholder="Enter Project ID" required>
+                </div>
+                <div class="form-group">
+                    <label for="projectTitle">Project Title</label>
+                    <input type="text" id="projectTitle" name="projectTitle" placeholder="Enter Project Title" required>
+                </div>
+                <div class="form-group">
+                    <label for="teamLead">Team Lead</label>
+                    <input type="text" id="teamLead" name="teamLead" placeholder="Enter Team Lead" required>
+                </div>
+                <button type="submit" >Submit</button>
+            </form>
+        </section>
+
+        <section id="phase-details" style="display: none;">
+            <h2>Update Phase Details</h2>
+            <form id="projectmamu">
+            <div class="project-info-summary">
+                <p><strong>Project ID:</strong> <span id="summaryProjectId"></span></p>
+                <p><strong>Project Title:</strong> <span id="summaryProjectTitle"></span></p>
+                <p><strong>Team Lead:</strong> <span id="summaryTeamLead"></span></p>
+            </div>
+            <div class="phase-container">
+                <div class="phase-box">
+                    <h3>Phase 1: Ideation and Design</h3>
+                    <div class="form-group">
+                        <label for="phase1Monitor">Monitor Name</label>
+                        <input type="text" id="phase1Monitor" name="phase1Monitor" placeholder="Enter Monitor Name" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="phase1Deadline">Deadline</label>
+                        <input type="date" id="phase1Deadline" name="phase1Deadline" required>
+                    </div>
+                </div>
+                <div class="phase-box">
+                    <h3>Phase 2: Hardware Development</h3>
+                    <div class="form-group">
+                        <label for="phase2Monitor">Monitor Name</label>
+                        <input type="text" id="phase2Monitor" name="phase2Monitor" placeholder="Enter Monitor Name" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="phase2Deadline">Deadline</label>
+                        <input type="date" id="phase2Deadline" name="phase2Deadline" required>
+                    </div>
+                </div>
+                <div class="phase-box">
+                    <h3>Phase 3: Software Integration</h3>
+                    <div class="form-group">
+                        <label for="phase3Monitor">Monitor Name</label>
+                        <input type="text" id="phase3Monitor" name="phase3Monitor" placeholder="Enter Monitor Name" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="phase3Deadline">Deadline</label>
+                        <input type="date" id="phase3Deadline" name="phase3Deadline" required>
+                    </div>
+               
+                </div>
+                <div class="phase-box">
+                    <h3>Phase 4: Design</h3>
+                    <div class="form-group">
+                        <label for="phase4Monitor">Monitor Name</label>
+                        <input type="text" id="phase4Monitor" name="phase4Monitor" placeholder="Enter Monitor Name" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="phase4Deadline">Deadline</label>
+                        <input type="date" id="phase4Deadline" name="phase4Deadline" required>
+                    </div>
+                  
+                </div>
+                <div class="phase-box">
+                    <h3>Phase 5: Manufacturing & Production</h3>
+                    <div class="form-group">
+                        <label for="phase5Monitor">Monitor Name</label>
+                        <input type="text" id="phase5Monitor" name="phase5Monitor" placeholder="Enter Monitor Name" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="phase5Deadline">Deadline</label>
+                        <input type="date" id="phase5Deadline" name="phase5Deadline" required>
+                    </div>
+          
+                </div>
+                <div class="phase-box">
+                    <h3>Phase 6: Deployment & Testing</h3>
+                    <div class="form-group">
+                        <label for="phase6Monitor">Monitor Name</label>
+                        <input type="text" id="phase6Monitor" name="phase6Monitor" placeholder="Enter Monitor Name" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="phase6Deadline">Deadline</label>
+                        <input type="date" id="phase6Deadline" name="phase6Deadline" required>
+                    </div>
+                    
+                </div>
+            </div>
+            <button type="submit" id="submit">submit</button>
+        </form>
+        <form id="back-button">
+            <button class="back-button" onclick="goBack()">Back</button>
+        </form>
+
+        </section>
+    </main>
+    
+    <div id="popup" class="popup" style="display: none;">
+        <div class="popup-content">
+            <p>Successfully Submitted</p>
+            <button id="close-popup">OK</button>
+        </div>
+    </div>
+    <div id="confirmation-dialog" class="confirmation-dialog">
+        <p>Are you sure you want to logout?</p>
+        <button onclick="logout()">Yes</button>
+        <button onclick="cancelLogout()">No</button>
+    </div>
+
+   
+  
+
+    <script src="mi.js"></script>
+    <script>
+        // Include the header
+        //includeHeader();
+    </script>
+</body>
+</html>

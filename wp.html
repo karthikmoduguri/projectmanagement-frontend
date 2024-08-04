@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Project Progress Dashboard</title>
+    <link rel="stylesheet" href="wp.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+</head>
+<body>
+    
+    
+    
+    
+    <header>
+        <div id="header"></div>
+        <h1>Project Progress Dashboard</h1>
+        
+    </header>
+    <main>
+        <div id="project-details" class="card">
+            <h2>Project ID: 001</h2>
+            <h3>Project Title: Example Project</h3>
+            <h4>Team Lead: John Doe</h4>
+        </div>
+
+        <div id="progress-updates" class="card">
+            <h2>Work Progress Update</h2>
+            <form id="progress-form">
+                <div class="phase" id="phase1-container">
+                    <input type="checkbox" id="phase1" name="phase1">
+                    <label for="phase1">Phase 1: Ideation and Design</label>
+                    <span class="timestamp" id="phase1-timestamp"></span>
+                </div>
+                <div class="phase" id="phase2-container">
+                    <input type="checkbox" id="phase2" name="phase2">
+                    <label for="phase2">Phase 2: Hardware Development</label>
+                    <span class="timestamp" id="phase2-timestamp"></span>
+                </div>
+                <div class="phase" id="phase3-container">
+                    <input type="checkbox" id="phase3" name="phase3">
+                    <label for="phase3">Phase 3: Software Integration</label>
+                    <span class="timestamp" id="phase3-timestamp"></span>
+                </div>
+                <div class="phase" id="phase4-container">
+                    <input type="checkbox" id="phase4" name="phase4">
+                    <label for="phase4">Phase 4: Design</label>
+                    <span class="timestamp" id="phase4-timestamp"></span>
+                </div>
+                <div class="phase" id="phase5-container">
+                    <input type="checkbox" id="phase5" name="phase5">
+                    <label for="phase5">Phase 5: Manufacturing & Production</label>
+                    <span class="timestamp" id="phase5-timestamp"></span>
+                </div>
+                <div class="phase" id="phase6-container">
+                    <input type="checkbox" id="phase6" name="phase6">
+                    <label for="phase6">Phase 6: Deployment & Testing</label>
+                    <span class="timestamp" id="phase6-timestamp"></span>
+                </div>
+                <button type="button" id="update-button" class="btn">Update</button>
+            </form>
+        </div>
+    </main>
+
+    <div id="popup" class="popup hidden">
+        <div class="popup-content">
+            <p>Successfully Updated!</p>
+            <button id="close-popup" class="btn">OK</button>
+        </div>
+    </div>
+    <button class="back-button" onclick="goBack()">Back to Previous Page</button>
+    <div id="confirmation-dialog" class="confirmation-dialog">
+        <p>Are you sure you want to logout?</p>
+        <button onclick="logout()">Yes</button>
+        <button onclick="cancelLogout()">No</button>
+    </div>
+
+   
+    
+    <script src="wp.js"></script>
+    <script>
+        // Include the header
+        includeHeader();
+    </script>
+</body>
+</html>

@@ -1,0 +1,30 @@
+function goToLogin() {
+    // Logic to navigate to login page
+    window.location.href = 'login.html'; // assuming login.html is your login page
+}
+document.getElementById('registration-form').addEventListener('submit', async (event) => {
+    event.preventDefault(); // Prevent the default form submission
+  
+    // Get form data
+    const username = document.getElementById('projectId').value;
+    const password = document.getElementById('password').value;
+    const role = document.getElementById('role').value;
+  console.log(username)
+    // Send data to backend
+    try {
+      const response = await fetch('http://localhost:3000/api/v1/users/register', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ username,password,role }),
+      });
+  
+      const data = await response.json();
+      
+      // Display success or error message
+    } catch (error) {
+      document.getElementById('responseMessage').innerText = 'An error occurred.';
+    }
+  });
+  

@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login System</title>
+    <style>
+        * {
+            margin: 0px;
+            padding: 0px;
+        }
+
+        body {
+            box-sizing: border-box;
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            background-image: url('4.jpg');
+            background-size: 100%;
+
+            background-repeat: no-repeat;
+
+        }
+
+        .container {
+            display: flex;
+            justify-content: space-around;
+            width: 80%;
+            margin: 84px 0;
+            /* background-image: url('2.jpg');
+            /* background-repeat: no-repeat; */
+            /* min-width: 100%; */
+        }
+
+        .form-section {
+            border: 1px solid #ccc;
+            padding: 20px;
+            border-radius: 8px;
+            width: 40%;
+            font-size: larger;
+            color: white;
+            /* background-color: white; */
+        }
+
+        .form-section h2 {
+            text-align: center;
+        }
+
+        .form-section label {
+            display: block;
+            margin: 10px 0 5px;
+        }
+
+        .form-section input {
+            width: 100%;
+            padding: 8px;
+            margin-bottom: 10px;
+            box-sizing: border-box;
+        }
+
+        .form-section button {
+            width: 100%;
+            padding: 10px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        .form-section button:hover {
+            background-color: #4fc7e5;
+            transform: scale(1.05);
+        }
+        .form-section button:active{
+            transform: scale(0.95);
+        }
+
+        #register {
+            background-color: #4fc7e5;
+            color: black;
+            /* border:  ; */
+            border-radius: 4px;
+            width: 176px;
+            height: 30px;
+        }
+
+        #register:hover {
+            background-color: #4CAF50;
+        }
+        #register1 {
+            background-color: #4fc7e5;
+            color: black;
+            /* border:  ; */
+            border-radius: 4px;
+            width: 176px;
+            height: 30px;
+        }
+
+        #register1:hover {
+            background-color: #4CAF50;
+        }
+
+        h1 {
+            /* text-shadow: #4fc7e5; */
+            color: #FF7F50;
+
+
+        }
+        .register{
+            display: flex;
+            justify-content: space-around;
+            width: 80%;
+            margin: -50px 0;
+
+        }
+    </style>
+</head>
+
+<body>
+    <h1><B>MAKER SPACE</B></h1>
+    <div class="container">
+        <form class="form-section" id="host-section">
+            <h2>Host Login</h2>
+            <label for="host-id">User Name</label>
+            <input type="text" id="host-id" name="host-id" placeholder="Enter Name" required>
+            <label for="host-password">Password</label>
+            <input type="password" id="host-password" name="host-password" placeholder="Enter Password" required>
+            <button type="submit" onclick="login_host()" id="host">Login</button>
+        </form>
+        <form class="form-section" id="team-lead-section">
+            <h2>Team Lead Login</h2>
+            <label for="team-lead-id">User Name</label>
+            <input type="text" id="team-lead-id" name="team-lead-id" placeholder="Enter Name" required>
+            <label for="team-lead-password">Password</label>
+            <input type="password" id="team-lead-password" name="team-lead-password" placeholder="Enter password" required>
+            <button type="submit" onclick="login()" id="l">Login</button>
+            <div id="responseMessage"></div>
+        </form>
+    </div>
+    <div class="register">
+        <button onclick="register()" id="register1">Register for host</button>
+        <button onclick="register1()" id="register">Register for lead</button>
+    </div>
+    <script>
+      
+
+        
+        document.getElementById('register').addEventListener('click', function (event) {
+            event.preventDefault();
+            // Add your validation logic here (if any)
+            // Redirect to dashboard.html
+            window.location.href = 'reg.html';
+        });
+        
+        document.getElementById('register1').addEventListener('click', function (event) {
+            event.preventDefault();
+            // Add your validation logic here (if any)
+            // Redirect to dashboard.html
+            window.location.href = 'regh.html';
+        });
+      
+
+        function login() {
+            console.log("hi ");
+            document.getElementById('team-lead-section').addEventListener('submit', async (event) => {
+            event.preventDefault(); // Prevent the default form submission
+  // Get form data
+  const username = document.getElementById('team-lead-id').value;
+  const password = document.getElementById('team-lead-password').value;
+  console.log("hi")
+
+  // Send login request to backend
+  try {
+    const response = await fetch('http://localhost:3000/api/v1/users/login', { // Replace with your backend URL
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ username, password }),
+    });
+
+    const data = await response.json();
+    
+    // Handle success or error
+    if (response.ok) {
+      // Store token (if applicable) and redirect
+      localStorage.setItem('authToken', data.token); // Store token if received
+      window.location.href = 'pmi.html'; // Redirect to another page
+    } else {
+      document.getElementById('responseMessage').innerText = `Error: ${data.message}`;
+    }
+  } catch (error) {
+    document.getElementById('responseMessage').innerText = 'An error occurred.';
+  }
+});
+
+
+        }
+        function login_host() {
+            console.log("hi ");
+            document.getElementById('host-section').addEventListener('submit', async (event) => {
+            event.preventDefault(); // Prevent the default form submission
+  // Get form data
+  const username = document.getElementById('host-id').value;
+  const password = document.getElementById('host-password').value;
+  console.log("hi")
+
+  // Send login request to backend
+  try {
+    const response = await fetch('http://localhost:3000/api/v1/users/login', { // Replace with your backend URL
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ username, password }),
+    });
+
+    const data = await response.json();
+    
+    // Handle success or error
+    if (response.ok) {
+      // Store token (if applicable) and redirect
+      localStorage.setItem('authToken', data.token); // Store token if received
+      window.location.href = 'hoif.html'; // Redirect to another page
+    } else {
+      document.getElementById('responseMessage').innerText = `Error: ${data.message}`;
+    }
+  } catch (error) {
+    document.getElementById('responseMessage').innerText = 'An error occurred.';
+  }
+});
+
+
+            
+        }
+    </script>
+</body>
+
+</html>
