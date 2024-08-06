@@ -9,6 +9,7 @@ body {
 
 header {
     background-color: #0073e6;
+    /* background-image: url('regh.jpg'); */
     color: white;
     padding: 1rem;
     text-align: center;
@@ -98,4 +99,14 @@ button:hover {
 
 .back-button:hover {
     background-color: #5a6268;
+    transform: scale(1.05);
+}
+.back-button:hover{
+    transform: scale(1.05);
+}
+.scaling:hover{
+    transform: scale(1.05);
+}
+.scaling:hover{
+    transform: scale(0.95);
 }

@@ -25,7 +25,8 @@
                     <label for="team-lead">Team Lead:</label>
                     <input type="text" id="team-lead" name="team-lead">
                 </div>
-                <button type="submit" id="next-button" class="btn">Next</button>
+                <button type="submit" id="next-button" class="btn">NEXT</button>
+                <button onclick="goBak()" id="goBak">BACK TO PREVIOUS PAGE</button>
             </form>
         </div>
         <div id="work-progress" class="hidden">
@@ -72,6 +73,13 @@
                 </form>
             </div>
         </div>
+        <div id="popup" class="popup hidden">
+            <div class="popup-content">
+                <p>Successfully Updated!</p>
+                <button id="close-popup" class="btn">OK</button>
+            </div>
+        </div>
+        <button class="back-button hidden" onclick="goBack()">Back to Previous Page</button>
     </main>
 
     <div id="popup" class="popup hidden">

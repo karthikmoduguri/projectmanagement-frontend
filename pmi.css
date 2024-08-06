@@ -1,17 +1,20 @@
+
 body {
     
     height: 100vh;
-    background-color: black;
+    /* background-color: black; */
     margin: 0;
     font-family: Arial, sans-serif;
 }
 #content{
     height: 90vh;
     /* margin-top: 100px; */
+    color: white;
     display: flex;
     justify-content: center;
     align-items: center;
 }
+
 
 .button-container {
     display: flex;
@@ -22,9 +25,9 @@ body {
 .big-button {
     min-width: 30vw;
     min-height: 13vh;
-    background-color: #007bff;
-    color: white;
-    border: none;
+    /* background-color: #007bff; */
+    color: black;
+    border: 1px solid black;
     border-radius: 5px;
     font-size: 1.5em;
     cursor: pointer;
@@ -32,12 +35,12 @@ body {
 }
 
 .big-button:hover {
-    background-color: #0056b3;
+    /* background-color: #0056b3; */
     transform: scale(1.05);
 
 }
 .big-button:active{
-    background-color: #007bff;
+    /* background-color: #007bff; */
     transform: scale(0.95);
 }
 /* extra css */
@@ -51,7 +54,7 @@ body {
 }
 
 header {
-    background-color: #0073e6;
+    /* background-color: #0073e6; */
     color: white;
     padding: 1rem;
     text-align: center;
@@ -122,4 +125,43 @@ header h1 {
 
 .confirmation-dialog button:hover {
     background-color: #005bb5;
+}
+
+@import url('https://fonts.googleapis.com/css2?family=Raleway:wght@400;700&display=swap');
+
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+/* body{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    background: #050801;
+    font-family: 'Raleway', sans-serif;
+} */
+
+button{
+  padding: 25px 30px;
+  background-color: white;
+  color: #03e9f4;
+  font-weight: bold;
+  border: none;
+  border-radius: 5px;
+  letter-spacing: 4px;
+  overflow: hidden;
+  transition: 0.5s;
+  cursor: pointer;
+}
+
+button:hover{
+    background: #03e9f4;
+    color: #050801;
+    box-shadow: 0 0 5px #03e9f4,
+                0 0 25px #03e9f4,
+                0 0 50px #03e9f4,
+                0 0 200px #03e9f4;
+     -webkit-box-reflect:below 1px linear-gradient(transparent, #0005);
 }

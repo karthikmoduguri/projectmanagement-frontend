@@ -146,7 +146,9 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         } else {
             console.error('Project ID not found in localStorage');
-        }
+        }     
+
+
     });
     
 
@@ -161,4 +163,15 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
     window.goBack = goBack;
+});
+
+// function goBak('click',()=>{
+//     window.location.href='';
+// })
+
+document.getElementById('goBak').addEventListener('click', function (event) {
+    event.preventDefault();
+    // Add your validation logic here (if any)
+    // Redirect to dashboard.html
+    window.location.href = 'pmi.html';
 });

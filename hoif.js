@@ -100,7 +100,7 @@ async function showProjectDetails() {
         const totalPhases = project.phases.length;
         project.phases.forEach(phase => {
             let phaseClass = '';
-            if (phase.status === 'Completed') {
+            if (phase.status === 'completed') {
                 phaseClass = 'completed';
                 completedPhases++;
             } else if (phase.status === 'On Track') {
@@ -119,17 +119,22 @@ async function showProjectDetails() {
         });
 
         const progressPercentage = (completedPhases / totalPhases) * 100;
+        
         detailsContent += `
+          <h3>Project Progress</h3>
+            <div class="progress-bar">
+                <div id="progress-bar" class="progress" style="width: ${progressPercentage}%;"></div>
             </div>
-            <div class="progress-container">
-                <div class="progress-bar">
-                    <div id="progress-bar" class="progress" style="width: ${progressPercentage}%;"></div>
-                </div>
-                <span id="progress-percentage">${progressPercentage.toFixed(1)}%</span>
-            </div>
+            <span id="progress-percentage">${progressPercentage.toFixed(1)}%</span>
+            
         `;
+        //document.getElementById('progress-bar').style.width=`${progressPercentage}%`;
+        const progressBarContainer = document.getElementById('progress-bar-container');
+        progressBarContainer.innerHTML = detailsContent;
+        progressBarContainer.style.display = 'block'; // Make sure the progress bar container is visible
 
-        document.getElementById('details-content').innerHTML = detailsContent;
+        //document.getElementById('details-content').innerHTML = detailsContent;
+        document.getElementById('pprogress-bar-container').style.display = 'block';
     }
 }
 

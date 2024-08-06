@@ -11,22 +11,26 @@
         <h1>Project Registration</h1>
     </header>
     <main>
+        <div>
+            <img src="regh.jpg" alt="">
+        </div>
         <section id="registration">
             <h2>REGISTRATION FORM</h2>
+            
             <form id="registration-form">
                 <div class="form-group">
                     <label for="projectId">Project Name</label>
-                    <input type="text" id="projectId" name="projectId" placeholder="Enter Project Name" required>
+                    <input type="text" id="projectId" name="projectId" placeholder="Enter Project Name" class="scaling" required>
                 </div>
                 <div class="form-group">
                     <label for="password">Password</label>
-                    <input type="password" id="password" name="password" placeholder="Enter Password" required>
+                    <input type="password" id="password" name="password" placeholder="Enter Password" class="scaling" required>
                 </div>
                 <div class="form-group">
                     <label for="projectId">Role</label>
-                    <input type="text" id="role" name="projectId" placeholder="Please Enter 'project'" required>
+                    <input type="text" id="role" name="projectId" placeholder="Please Enter 'project'" class="scaling" required>
                 </div>
-                <button type="submit">Register</button>
+                <button type="submit" id="registerButton" class="scaling">Register</button>
             </form>
             <div id="responseMessage"></div>
             <button class="back-button" onclick="goToLogin()">Back to Login</button>

@@ -91,7 +91,13 @@ document.getElementById('projectmamu').addEventListener('submit', async function
         console.error('Error:', error);
     }
 });
-
+function includeHeader() {
+    fetch('header.html')
+        .then(response => response.text())
+        .then(data => {
+            document.getElementById('header').innerHTML = data;
+        });
+}
 function logout() {
     // Logic to handle logout, e.g., clearing session data, redirecting to login page
     // alert("Logging out...");
@@ -119,4 +125,10 @@ document.getElementById('close-popup').addEventListener('click', function() {
 document.getElementById('back-button').addEventListener('click', function() {
     document.getElementById('project-details').style.display = 'none';
     document.getElementById('initial-details').style.display = 'block';
+});
+document.getElementById('goBak').addEventListener('click', function (event) {
+    event.preventDefault();
+    // Add your validation logic here (if any)
+    // Redirect to dashboard.html
+    window.location.href = 'pmi.html';
 });

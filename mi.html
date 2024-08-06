@@ -10,26 +10,35 @@
     
     
     <header>
-        <h1>Project Details Registration</h1>
-        <div id="header"></div>
+        <h1>PROJECT DETAILS REGISTRATION</h1>
+        <!-- <div id="header"></div> -->
     </header>
+    
+    <div id="header"></div>
+    <div id="content">
     <main>
         <section id="project-details">
-            <h2>Enter Project Details</h2>
+            <div id="confirmation-dialogs" class="confirmation-dialog">
+                <p>Are you sure you want to logout?</p>
+                <button onclick="logout()">Yes</button>
+                <button onclick="cancelLogout()">No</button>
+            </div>
+            <h2>ENTER PROJECT DETAILS</h2>
             <form id="project-info-form">
                 <div class="form-group">
                     <label for="projectId">Project ID</label>
-                    <input type="text" id="projectId" name="projectId" placeholder="Enter Project ID" required>
+                    <input type="text" id="projectId" name="projectId" placeholder="Enter Project ID" class="scaling" required>
                 </div>
                 <div class="form-group">
                     <label for="projectTitle">Project Title</label>
-                    <input type="text" id="projectTitle" name="projectTitle" placeholder="Enter Project Title" required>
+                    <input type="text" id="projectTitle" name="projectTitle" placeholder="Enter Project Title" class="scaling" required>
                 </div>
                 <div class="form-group">
                     <label for="teamLead">Team Lead</label>
-                    <input type="text" id="teamLead" name="teamLead" placeholder="Enter Team Lead" required>
+                    <input type="text" id="teamLead" name="teamLead" placeholder="Enter Team Lead" class="scaling" required>
                 </div>
-                <button type="submit" >Submit</button>
+                <button type="submit" class="scaling">Submit</button>
+                <button onclick="goBak()" id="goBak" class="scaling">BACK TO PREVIOUS PAGE</button>
             </form>
         </section>
 
@@ -41,6 +50,11 @@
                 <p><strong>Project Title:</strong> <span id="summaryProjectTitle"></span></p>
                 <p><strong>Team Lead:</strong> <span id="summaryTeamLead"></span></p>
             </div>
+            
+            
+            <!-- <form id="back-button">
+                <button class="back-button" onclick="goBack()">Back</button>
+            </form> -->
             <div class="phase-container">
                 <div class="phase-box">
                     <h3>Phase 1: Ideation and Design</h3>
@@ -113,10 +127,10 @@
                     
                 </div>
             </div>
-            <button type="submit" id="submit">submit</button>
+            <button type="submit" id="submit" class="scaling">submit</button>
         </form>
         <form id="back-button">
-            <button class="back-button" onclick="goBack()">Back</button>
+            <button class="back-button" onclick="goBack()" class="scaling">BACK</button>
         </form>
 
         </section>
@@ -140,7 +154,7 @@
     <script src="mi.js"></script>
     <script>
         // Include the header
-        //includeHeader();
+        includeHeader();
     </script>
 </body>
 </html>

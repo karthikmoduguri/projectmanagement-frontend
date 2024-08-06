@@ -118,6 +118,13 @@
             margin: -50px 0;
 
         }
+        .scaling:hover{
+            transform: scale(1.05);
+
+        }
+        .scaling:active{
+            transform: scale(0.95);
+        }
     </style>
 </head>
 
@@ -125,7 +132,7 @@
     <h1><B>MAKER SPACE</B></h1>
     <div class="container">
         <form class="form-section" id="host-section">
-            <h2>Host Login</h2>
+            <h2>DIRECTOR LOGIN</h2>
             <label for="host-id">User Name</label>
             <input type="text" id="host-id" name="host-id" placeholder="Enter Name" required>
             <label for="host-password">Password</label>
@@ -133,7 +140,7 @@
             <button type="submit" onclick="login_host()" id="host">Login</button>
         </form>
         <form class="form-section" id="team-lead-section">
-            <h2>Team Lead Login</h2>
+            <h2>MONITOR LOGIN</h2>
             <label for="team-lead-id">User Name</label>
             <input type="text" id="team-lead-id" name="team-lead-id" placeholder="Enter Name" required>
             <label for="team-lead-password">Password</label>
@@ -143,8 +150,8 @@
         </form>
     </div>
     <div class="register">
-        <button onclick="register()" id="register1">Register for host</button>
-        <button onclick="register1()" id="register">Register for lead</button>
+        <button onclick="register()" id="register1" class="scaling">REGISTER FOR HOST</button>
+        <button onclick="register1()" id="register" class="scaling">REGISTER FOR MONITOR</button>
     </div>
     <script>
       

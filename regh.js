@@ -29,4 +29,15 @@ document.getElementById('registration-form').addEventListener('submit', async (e
       document.getElementById('responseMessage').innerText = 'An error occurred.';
     }
   });
-  
+  document.getElementById('registerButton').addEventListener('click', () => {
+    speak("You have been successfully registered");
+});
+
+function speak(text) {
+    if ('speechSynthesis' in window) {
+        const utterance = new SpeechSynthesisUtterance(text);
+        speechSynthesis.speak(utterance);
+    } else {
+        console.log('Speech Synthesis API is not supported in this browser.');
+    }
+}

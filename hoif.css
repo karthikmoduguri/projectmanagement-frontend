@@ -98,30 +98,32 @@ button:hover {
 }
 
 .phase-card.not-completed {
-    background-color: red;
-    color: white;
+    background-color: rgb(229, 45, 35);
+    color: rgb(0, 0, 0);
 }
 
-.progress-bar {
+/* .progress-bar {
     background-color: #f0f0f0;
     border-radius: 5px;
     margin-top: 1rem;
     overflow: hidden;
-}
-
+    width:0%; /* Default width 
+    transition: width 0.5s ease-in-out;
+} */
+/* 
 .progress {
     background-color: green;
     height: 20px;
-}
+} */
 
-.progress-container {
+/* .progress-container {
     display: flex;
     align-items: center;
-}
+} */
 
-.progress-container .percentage {
+/* .progress-container .percentage {
     margin-left: 10px;
-}
+} */
 
 #create-project-form {
     display: flex;
@@ -209,8 +211,9 @@ header h1 {
 
 .confirmation-dialog button {
     margin: 10px;
-    padding: 10px 20px;
+    padding: 10px 40px;
     border: none;
+    /* width: 10px; */
     background-color: #0073e6;
     color: white;
     border-radius: 5px;
@@ -221,3 +224,34 @@ header h1 {
 .confirmation-dialog button:hover {
     background-color: #005bb5;
 }
+
+.progress-container {
+    width: 100%;
+    background-color: #e0e0e0;
+    border-radius: 5px;
+    overflow: hidden;
+    position: relative;
+    margin-top: 20px;
+}
+.progress-bar{
+    border: 2px solid black;
+    height: 20px;
+    width: 1150px;
+}
+#progress-bar {
+    height: 30px;
+    background-color: #33ed1e;
+    width: 0%; /* Default width */
+    transition: width 0.5s ease-in-out; /* Smooth transition */
+    height: 20px;
+}
+#progress-percentage {
+    position: absolute;
+    top: 350px;
+    left: 162px;
+    right: 10px;
+    color: #000;
+    font-weight: bold;
+}
+
+

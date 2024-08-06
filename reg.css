@@ -98,4 +98,14 @@ button:hover {
 
 .back-button:hover {
     background-color: #5a6268;
+    transform: scale(1.05);
+}
+.back-button:active{
+    transform:scale(0.95)
+}
+.scaling:hover{
+    transform: scale(1.05);
+}
+.scaling:active{
+    transform:scale(0.95)
 }

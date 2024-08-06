@@ -11,30 +11,34 @@
         <h1>Project Registration</h1>
     </header>
     <main>
+        <div>
+            <img src="regh.jpg" alt="">
+        </div>
         <section id="registration">
             <h2>REGISTRATION FORM</h2>
             <form id="registration-form">
                 <div class="form-group">
                     <label for="projectId">USER NAME</label>
-                    <input type="text" id="projectId" name="projectId" placeholder="Enter User name" required>
+                    <input type="text" id="projectId" name="projectId" placeholder="Enter User name" class="scaling" required>
                 </div>
                 <div class="form-group">
                     <label for="password">Password</label>
-                    <input type="password" id="password" name="password" placeholder="Enter Password" required>
+                    <input type="password" id="password" name="password" placeholder="Enter Password" class="scaling"  required>
                 </div>
                 <div class="form-group">
                     <label for="projectId">ROLE</label>
-                    <input type="text" id="role" name="projectId" placeholder="Please Enter 'director'" required>
+                    <input type="text" id="role" name="projectId" placeholder="Please Enter 'director'" class="scaling"  required>
                 </div>
                 <div class="form-group">
                     <label for="projectId">Registration Key</label>
-                    <input type="text" id="key" name="projectId" placeholder="Enter Registration Key" required>
+                    <input type="text" id="key" name="projectId" placeholder="Enter Registration Key" class="scaling"  required>
                 </div>
                 
-                <button type="submit">Register</button>
+                <button type="submit" id="registerButton" class="scaling"  >Register</button>
+                <!-- <div id="confettiContainer" class="confetti"></div> -->
             </form>
             <div id="responsemessage"></div>
-            <button class="back-button" onclick="goToLogin()">Back to Login</button>
+            <button class="back-button"  onclick="goToLogin()">Back to Login</button>
         </section>
     </main>
 
