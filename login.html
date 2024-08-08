@@ -21,9 +21,7 @@
             align-items: center;
             background-image: url('4.jpg');
             background-size: 100%;
-
             background-repeat: no-repeat;
-
         }
 
         .container {
@@ -31,9 +29,6 @@
             justify-content: space-around;
             width: 80%;
             margin: 84px 0;
-            /* background-image: url('2.jpg');
-            /* background-repeat: no-repeat; */
-            /* min-width: 100%; */
         }
 
         .form-section {
@@ -43,7 +38,6 @@
             width: 40%;
             font-size: larger;
             color: white;
-            /* background-color: white; */
         }
 
         .form-section h2 {
@@ -76,14 +70,14 @@
             background-color: #4fc7e5;
             transform: scale(1.05);
         }
-        .form-section button:active{
+
+        .form-section button:active {
             transform: scale(0.95);
         }
 
         #register {
             background-color: #4fc7e5;
             color: black;
-            /* border:  ; */
             border-radius: 4px;
             width: 176px;
             height: 30px;
@@ -92,10 +86,10 @@
         #register:hover {
             background-color: #4CAF50;
         }
+
         #register1 {
             background-color: #4fc7e5;
             color: black;
-            /* border:  ; */
             border-radius: 4px;
             width: 176px;
             height: 30px;
@@ -106,146 +100,134 @@
         }
 
         h1 {
-            /* text-shadow: #4fc7e5; */
             color: #FF7F50;
-
-
         }
-        .register{
+
+        .register {
             display: flex;
             justify-content: space-around;
             width: 80%;
             margin: -50px 0;
-
         }
-        .scaling:hover{
+
+        .scaling:hover {
             transform: scale(1.05);
-
         }
-        .scaling:active{
+
+        .scaling:active {
             transform: scale(0.95);
         }
     </style>
+    <script>
+        function updateForm() {
+            const role = document.getElementById('role').value;
+            const loginForm = document.getElementById('loginForm');
+            const registerButton = document.getElementById('registerButton');
+            
+
+            if (role === 'director') {
+                loginForm.innerHTML = `
+                    <h2>DIRECTOR LOGIN</h2>
+                    <label for="directorName">User Name</label>
+                    <input type="text" id="directorName" name="directorName" placeholder="Enter Name" required>
+                    <label for="directorPassword">Password</label>
+                    <input type="password" id="directorPassword" name="directorPassword" placeholder="Enter Password" required>
+                    <button type="submit">Login</button>
+                    <div id="responseMessage"></div>
+                `;
+                registerButton.textContent = 'REGISTER FOR DIRECTOR';
+                registerButton.onclick = () => location.href = 'regh.html';
+            } else if (role === 'project') {
+                loginForm.innerHTML = `
+                    <h2>MONITOR LOGIN</h2>
+                    <label for="projectName">User Name</label>
+                    <input type="text" id="projectName" name="projectName" placeholder="Enter Name" required>
+                    <label for="projectPassword">Password</label>
+                    <input type="password" id="projectPassword" name="projectPassword" placeholder="Enter Password" required>
+                    <button type="submit">Login</button>
+                    <div id="responseMessage"></div>
+                `;
+                registerButton.textContent = 'REGISTER FOR MONITOR';
+                registerButton.onclick = () => location.href = 'reg.html';
+            } else if (role === 'technical_officer') {
+                loginForm.innerHTML = `
+                    <h2>TECHNICAL OFFICER LOGIN</h2>
+                    <label for="technicalOfficerName">User Name</label>
+                    <input type="text" id="technicalOfficerName" name="technicalOfficerName" placeholder="Enter Name" required>
+                    <label for="technicalOfficerPassword">Password</label>
+                    <input type="password" id="technicalOfficerPassword" name="technicalOfficerPassword" placeholder="Enter Password" required>
+                    <button type="submit">Login</button>
+                    <div id="responseMessage"></div>
+                `;
+                registerButton.textContent = 'REGISTER FOR TECHNICAL OFFICER';
+                registerButton.onclick = () => location.href = 'regt.html';
+            }
+
+            // Attach event listener for the login button
+            document.querySelector('.form-section button').addEventListener('click', function(event) {
+                event.preventDefault();
+                login(role);
+            });
+        }
+
+        async function login(role) {
+            const username = document.getElementById(`${role}Name`).value;
+            const password = document.getElementById(`${role}Password`).value;
+            const responseMessage = document.getElementById('responseMessage');
+
+            try {
+                const response = await fetch('http://localhost:3000/api/v1/users/login', { // Replace with your backend URL
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ username, password, role }),
+                });
+
+                const data = await response.json();
+
+                // Handle success or error
+                if (response.ok) {
+                    // Store token (if applicable) and redirect
+                    localStorage.setItem('authToken', data.token); // Store token if received
+                    console.log(localStorage.getItem('authToken'));
+                    let redirectPage;
+                    if (role === 'director') {
+                        window.location.href = 'hoif.html';
+                    } else if (role === 'project') {
+                        window.location.href = 'pmi.html';
+                    } else if (role === 'technical_officer') {
+                        window.location.href = 'tof.html';
+                    }
+                    // window.location.href = redirectPage; // Redirect to the respective page
+                } else {
+                    responseMessage.innerText = `Error: ${data.message}`;
+                }
+            } catch (error) {
+                responseMessage.innerText = 'An error occurred.';
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', updateForm);
+    </script>
 </head>
 
 <body>
-    <h1><B>MAKER SPACE</B></h1>
+    <h1><b>MAKER SPACE</b></h1>
+    <label for="role">Select User Type:</label>
+    <select id="role" name="role" onchange="updateForm()">
+        <option value="director" id="director">Director Registration or Login</option>
+        <option value="project" id="project">Monitor Registration or Login</option>
+        <option value="technical_officer">Technical Officer Registration or Login</option>
+    </select>
     <div class="container">
-        <form class="form-section" id="host-section">
-            <h2>DIRECTOR LOGIN</h2>
-            <label for="host-id">User Name</label>
-            <input type="text" id="host-id" name="host-id" placeholder="Enter Name" required>
-            <label for="host-password">Password</label>
-            <input type="password" id="host-password" name="host-password" placeholder="Enter Password" required>
-            <button type="submit" onclick="login_host()" id="host">Login</button>
-        </form>
-        <form class="form-section" id="team-lead-section">
-            <h2>MONITOR LOGIN</h2>
-            <label for="team-lead-id">User Name</label>
-            <input type="text" id="team-lead-id" name="team-lead-id" placeholder="Enter Name" required>
-            <label for="team-lead-password">Password</label>
-            <input type="password" id="team-lead-password" name="team-lead-password" placeholder="Enter password" required>
-            <button type="submit" onclick="login()" id="l">Login</button>
-            <div id="responseMessage"></div>
+        <form class="form-section" id="loginForm">
+            <!-- Initial form content will be inserted here by JavaScript -->
         </form>
     </div>
     <div class="register">
-        <button onclick="register()" id="register1" class="scaling">REGISTER FOR HOST</button>
-        <button onclick="register1()" id="register" class="scaling">REGISTER FOR MONITOR</button>
+        <button id="registerButton" class="scaling">REGISTER FOR DIRECTOR</button>
     </div>
-    <script>
-      
-
-        
-        document.getElementById('register').addEventListener('click', function (event) {
-            event.preventDefault();
-            // Add your validation logic here (if any)
-            // Redirect to dashboard.html
-            window.location.href = 'reg.html';
-        });
-        
-        document.getElementById('register1').addEventListener('click', function (event) {
-            event.preventDefault();
-            // Add your validation logic here (if any)
-            // Redirect to dashboard.html
-            window.location.href = 'regh.html';
-        });
-      
-
-        function login() {
-            console.log("hi ");
-            document.getElementById('team-lead-section').addEventListener('submit', async (event) => {
-            event.preventDefault(); // Prevent the default form submission
-  // Get form data
-  const username = document.getElementById('team-lead-id').value;
-  const password = document.getElementById('team-lead-password').value;
-  console.log("hi")
-
-  // Send login request to backend
-  try {
-    const response = await fetch('http://localhost:3000/api/v1/users/login', { // Replace with your backend URL
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({ username, password }),
-    });
-
-    const data = await response.json();
-    
-    // Handle success or error
-    if (response.ok) {
-      // Store token (if applicable) and redirect
-      localStorage.setItem('authToken', data.token); // Store token if received
-      window.location.href = 'pmi.html'; // Redirect to another page
-    } else {
-      document.getElementById('responseMessage').innerText = `Error: ${data.message}`;
-    }
-  } catch (error) {
-    document.getElementById('responseMessage').innerText = 'An error occurred.';
-  }
-});
-
-
-        }
-        function login_host() {
-            console.log("hi ");
-            document.getElementById('host-section').addEventListener('submit', async (event) => {
-            event.preventDefault(); // Prevent the default form submission
-  // Get form data
-  const username = document.getElementById('host-id').value;
-  const password = document.getElementById('host-password').value;
-  console.log("hi")
-
-  // Send login request to backend
-  try {
-    const response = await fetch('http://localhost:3000/api/v1/users/login', { // Replace with your backend URL
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({ username, password }),
-    });
-
-    const data = await response.json();
-    
-    // Handle success or error
-    if (response.ok) {
-      // Store token (if applicable) and redirect
-      localStorage.setItem('authToken', data.token); // Store token if received
-      window.location.href = 'hoif.html'; // Redirect to another page
-    } else {
-      document.getElementById('responseMessage').innerText = `Error: ${data.message}`;
-    }
-  } catch (error) {
-    document.getElementById('responseMessage').innerText = 'An error occurred.';
-  }
-});
-
-
-            
-        }
-    </script>
 </body>
 
 </html>

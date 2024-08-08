@@ -113,7 +113,10 @@ async function showProjectDetails() {
                     <p><strong>Phase:</strong> ${phase.name}</p>
                     <p><strong>Monitor:</strong> ${phase.monitor}</p>
                     <p><strong>Deadline:</strong> ${phase.deadline}</p>
+                    <p><strong>completion date:</strong> ${phase.completionDate?new Date(phase.completionDate).toLocaleDateString('en-IN'):""}</p>
                     <p><strong>Status:</strong> ${phase.status}</p>
+                    <p><strong>isontime:</strong> ${phase.isOnTime}</p>
+                    <p><strong>submission time:</strong> ${phase.timeDifference||""}</p>
                 </div>
             `;
         });
