@@ -1,67 +1,83 @@
-let selectedProjectId = null; // Global variable to store selected project ID
-
 document.addEventListener('DOMContentLoaded', () => {
-    displayProjects();
-    hideCreateProjectButton();
-});
+    const addProjectBtn = document.getElementById('addProjectBtn');
+    const removeProjectBtn = document.getElementById('removeProjectBtn');
+    const addProjectForm = document.getElementById('addProjectForm');
+    const projectForm = document.getElementById('projectForm');
+    const projectTableBody = document.getElementById('projectTableBody');
+    const projectDetails = document.getElementById('projectDetails');
+    const backButton = document.getElementById('backButton');
+    const detailsContainer = document.getElementById('detailsContainer');
+    const phaseBoxes = document.getElementById('phaseBoxes');
+    const progressBar = document.getElementById('progressBar');
+    const progressPercentage = document.getElementById('progressPercentage');
+    const projectTable = document.getElementById('projectTable');
+    const searchInput = document.getElementById('searchInput'); // New: Search Input
+    let projects = [];
 
-// Function to get projects from localStorage
-function getProjects() {
-    return JSON.parse(localStorage.getItem('projects')) || [];
-}
+    // Toggle Add Project Form
+    addProjectBtn.addEventListener('click', () => {
+        addProjectForm.classList.toggle('hidden');
+    });
 
-// Function to save projects to localStorage
-function saveProjects(projects) {
-    localStorage.setItem('projects', JSON.stringify(projects));
-}
+    // Handle Project Form Submission
+    projectForm.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        
+        const projectId = document.getElementById('projectId').value.trim();
+        const projectName = document.getElementById('projectTitle').value.trim();
+        const teamLead = document.getElementById('teamLead').value.trim();
+        
+        if (projectId && projectName && teamLead) {
+            const newProject = {
+                projectId: projectId,
+                projectName: projectName,
+                teamLead: teamLead
+            };
+            
+            try {
+                const response = await fetch('http://localhost:3000/api/v1/projects', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${localStorage.getItem('authToken')}`
+                    },
+                    body: JSON.stringify(newProject)
+                });
 
-// Show the overview page
-function showOverview() {
-    document.getElementById('project-overview').style.display = 'block';
-    document.getElementById('project-details').style.display = 'none';
-    document.getElementById('create-project').style.display = 'none';
-    document.getElementById('progress-bar-container').style.display = 'none';
-    document.getElementById('create-project-btn').style.display = 'block'; // Show button on the overview page
-}
-
-// Function to fetch project details from the backend
-async function fetchProjectDetails(project) {
-    try {
-        const response = await fetch(`http://localhost:3000/api/v1/projects/${project}`, {
-            method: 'GET',
-            headers: {
-                'Content-Type': 'application/json',
-                'Authorization': `Bearer ${localStorage.getItem('authToken')}`
+                if (response.ok) {
+                    const result = await response.json();
+                    console.log('Project added:', result);
+                    displayProjects(); // Refresh project list
+                    addProjectForm.classList.add('hidden');
+                    projectForm.reset();
+                } else {
+                    const error = await response.json();
+                    console.error('Error adding project:', error.message);
+                    alert('Failed to add project: ' + error.message);
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                alert('An error occurred while adding the project.');
             }
-        });
-        if (response.ok) {
-            console.log(response);
-            return await response.json(); // Return the project details
-        } else {
-            alert('Project not found');
-            return null;
         }
-    } catch (error) {
-        console.error('Error:', error);
-        return null;
-    }
-}
+    });
 
+    // Handle Remove Project
+    removeProjectBtn.addEventListener('click', () => {
+        const projectIdToRemove = prompt('Enter Project ID to remove:').trim();
+        if (projectIdToRemove) {
+            projects = projects.filter(project => project.projectId !== projectIdToRemove);
+            updateTable();
+        }
+    });
 
+    // Show Project Details
+    async function showProjectDetails(project) {
+        projectTable.classList.add('hidden');
+        projectDetails.classList.remove('hidden');
 
-
-async function showProjectDetails() {
-    document.getElementById('project-overview').style.display = 'none';
-    document.getElementById('project-details').style.display = 'block';
-    document.getElementById('create-project').style.display = 'none';
-    document.getElementById('progress-bar-container').style.display = 'block';
-    document.getElementById('create-project-btn').style.display = 'none'; // Hide button on details page
-
-    if (selectedProjectId) {
-        console.log(selectedProjectId);
-        const projectId=selectedProjectId
         try {
-            const response = await fetch(`http://localhost:3000/api/v1/phases/p/${projectId}`, {
+            const response = await fetch(`http://localhost:3000/api/v1/phases/p/${project.projectId}`, {
                 method: 'GET',
                 headers: {
                     'Content-Type': 'application/json',
@@ -80,193 +96,143 @@ async function showProjectDetails() {
             console.error('Error:', error.message);
             alert(`Error fetching project: ${error.message}`);
         }
-    } else {
-        alert('No project ID specified.');
-    }
+    
 
-    const id=localStorage.getItem('projectMongoId');
+            const projectId=localStorage.getItem('projectMongoId');
 
-    const project = await fetchProjectDetails(id);
-    console.log(project)
-    if (project) {
-        let detailsContent = `
-            <p><strong>Project ID:</strong> ${project.projectId}</p>
-            <p><strong>Project Title:</strong> ${project.projectName}</p>
-            <p><strong>Team Lead:</strong> ${project.teamLead}</p>
-            <div class="phases-grid">
-        `;
-
-        let completedPhases = 0;
-        const totalPhases = project.phases.length;
-        project.phases.forEach(phase => {
-            let phaseClass = '';
-            if (phase.status === 'completed') {
-                phaseClass = 'completed';
-                completedPhases++;
-            } else if (phase.status === 'On Track') {
-                phaseClass = 'on-track';
-            } else {
-                phaseClass = 'not-completed';
+        
+        const response = await fetch(`http://localhost:3000/api/v1/projects/${projectId}`, {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${localStorage.getItem('authToken')}`
             }
-            detailsContent += `
-                <div class="phase-card ${phaseClass}">
-                    <p><strong>Phase:</strong> ${phase.name}</p>
-                    <p><strong>Monitor:</strong> ${phase.monitor}</p>
-                    <p><strong>Deadline:</strong> ${phase.deadline}</p>
+        });
+
+        if (response.ok) {
+            const projectDetails = await response.json();
+            detailsContainer.innerHTML = `
+                <h3>Project ID: ${projectDetails.projectId}</h3>
+                <p>Title: ${projectDetails.projectName}</p>
+                <p>Team Lead: ${projectDetails.teamLead}</p>
+            `;
+            phaseBoxes.innerHTML = projectDetails.phases.map(phase => `
+                <div class="phase-box ${getPhaseClass(phase.status)}">
+                    <p>${phase.name}</p>
+                    <p>Monitor: ${phase.monitor}</p>
+                    <p>Deadline: ${phase.deadline?new Date(phase.deadline).toLocaleDateString('en-IN'):""}</p>
                     <p><strong>completion date:</strong> ${phase.completionDate?new Date(phase.completionDate).toLocaleDateString('en-IN'):""}</p>
-                    <p><strong>Status:</strong> ${phase.status}</p>
+
+                    <p>Status: ${phase.status}</p>
                     <p><strong>isontime:</strong> ${phase.isOnTime}</p>
                     <p><strong>submission time:</strong> ${phase.timeDifference||""}</p>
                 </div>
-            `;
-        });
-
-        const progressPercentage = (completedPhases / totalPhases) * 100;
-        
-        detailsContent += `
-          <h3>Project Progress</h3>
-            <div class="progress-bar">
-                <div id="progress-bar" class="progress" style="width: ${progressPercentage}%;"></div>
-            </div>
-            <span id="progress-percentage">${progressPercentage.toFixed(1)}%</span>
-            
-        `;
-        //document.getElementById('progress-bar').style.width=`${progressPercentage}%`;
-        const progressBarContainer = document.getElementById('progress-bar-container');
-        progressBarContainer.innerHTML = detailsContent;
-        progressBarContainer.style.display = 'block'; // Make sure the progress bar container is visible
-
-        //document.getElementById('details-content').innerHTML = detailsContent;
-        document.getElementById('pprogress-bar-container').style.display = 'block';
+            `).join('');
+            const completedPhases = projectDetails.phases.filter(phase => phase.status === 'completed').length;
+            const totalPhases = projectDetails.phases.length;
+            const percentage = (completedPhases / totalPhases) * 100;
+            progressBar.value = percentage;
+            progressPercentage.textContent = `${percentage.toFixed(2)}%`;
+        } else {
+            console.error('Error fetching project details');
+            alert('Failed to load project details.');
+        }
     }
-}
 
-
-function add() {
-    const token = localStorage.getItem('authToken');
-    console.log(token);
-    document.getElementById('create-project-form').addEventListener('submit', async (event) => {
-        event.preventDefault(); // Prevent the default form submission
-        console.log("hi")
-        const projectId = document.getElementById('project-id').value;
-        const projectName = document.getElementById('project-title').value;
-        const teamLead = document.getElementById('team-lead').value;
-
-        // Send login request to backend
+    // Update Table with Projects
+    async function displayProjects() {
         try {
-            console.log("hira")
-            const response = await fetch('http://localhost:3000/api/v1/projects', { // Replace with your backend URL
-                method: 'POST',
+            const response = await fetch('http://localhost:3000/api/v1/projects', {
+                method: 'GET',
                 headers: {
                     'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${token}`,
-                },
-                body: JSON.stringify({ projectId, projectName, teamLead }),
+                    'Authorization': `Bearer ${localStorage.getItem('authToken')}`
+                }
             });
 
-            const data = await response.json();
-
-            // Handle success or error
             if (response.ok) {
-                // Store token (if applicable) and redirect
-                localStorage.setItem('authToken', data.token); // Store token if received
-                window.location.href = 'hoif.html'; // Redirect to another page
+                projects = await response.json();
+                projectTableBody.innerHTML = '';
+                projects.forEach((project, index) => {
+                    const row = document.createElement('tr');
+                    row.innerHTML = `
+                      <td>${index + 1}</td>
+            <td>${project.projectId}</td>
+            <td>${project.projectName}</td>
+            <td>${project.teamLead}</td>
+            ${project.phases.length > 0 ? 
+                project.phases.map(phase => `
+                    <td class="phase-box ${getPhaseClass(phase.status)}">
+                        ${phase.status === 'completed' ? '✔️' : '❌'}
+                    </td>
+                `).join('') : 
+                '<td colspan="6">!!!Phases not created yet!!! </td>' // Adjust colspan based on your table structure
+            }
+                    `;
+                    row.addEventListener('click', () => handleProjectClick(project.projectId));
+                    projectTableBody.appendChild(row);
+                });
             } else {
-                document.getElementById('responseMessage').innerText = `Error: ${data.message}`;
+                console.error('Error fetching projects');
+                alert('Failed to load projects.');
             }
         } catch (error) {
-            document.getElementById('responseMessage').innerText = 'An error occurred.';
+            console.error('Error:', error);
+            alert('An error occurred while fetching projects.');
         }
+    }
+
+    // Handle Project Click
+    function handleProjectClick(projectId) {
+        const project = projects.find(p => p.projectId === projectId);
+        if (project) {
+            showProjectDetails(project);
+        } else {
+            console.error('Project not found');
+            alert('Project not found.');
+        }
+    }
+
+    // Get Phase Class based on Status
+    function getPhaseClass(status) {
+        switch (status) {
+            case 'Completed': return 'completed';
+            case 'On Track': return 'on-track';
+            case 'Not Completed': return 'not-completed';
+        }
+    }
+
+    // Back Button Event
+    backButton.addEventListener('click', () => {
+        projectTable.classList.remove('hidden');
+        projectDetails.classList.add('hidden');
     });
-}
 
-// Show the create project page
-function showCreateProjectPage() {
-    document.getElementById('project-overview').style.display = 'none';
-    document.getElementById('project-details').style.display = 'none';
-    document.getElementById('create-project').style.display = 'block';
-    document.getElementById('progress-bar-container').style.display = 'none';
-    document.getElementById('create-project-btn').style.display = 'none'; // Hide button on create project page
-}
-
-// Create a new project
-function createProject(event) {
-    event.preventDefault();
-    const projectId = document.getElementById('project-id').value;
-    const projectTitle = document.getElementById('project-title').value;
-    const teamLead = document.getElementById('team-lead').value;
-
-    const newProject = {
-        id: projectId,
-        title: projectTitle,
-        teamLead: teamLead,
-        groupMembers: [],
-        phases: [
-            { name: 'Ideation and Design', monitor: '', deadline: '', status: 'Pending', timestamp: '' },
-            { name: 'Hardware Development', monitor: '', deadline: '', status: 'Pending', timestamp: '' },
-            { name: 'Software Integration', monitor: '', deadline: '', status: 'Pending', timestamp: '' },
-            { name: 'Design', monitor: '', deadline: '', status: 'Pending', timestamp: '' },
-            { name: 'Manufacturing & Production', monitor: '', deadline: '', status: 'Pending', timestamp: '' },
-            { name: 'Deployment & Testing', monitor: '', deadline: '', status: 'Pending', timestamp: '' }
-        ]
-    };
-
-    const projects = getProjects();
-    projects.push(newProject);
-    saveProjects(projects);
-    showOverview();
-    displayProjects();
-}
-
-// Display all projects on the overview page
-function displayProjects() {
-    const projects = getProjects();
-    const projectsGrid = document.getElementById('projects-grid');
-    projectsGrid.innerHTML = '';
-    projects.forEach(project => {
-        projectsGrid.innerHTML += `
-            <div class="project-card" onclick="handleProjectCardClick('${project.id}')">
-                <p><strong>Project ID:</strong> ${project.id}</p>
-                <p><strong>Project Title:</strong> ${project.title}</p>
-                <p><strong>Team Lead:</strong> ${project.teamLead}</p>
-            </div>
-        `;
-    });
-}
-
-// Handle clicking on a project card
-function handleProjectCardClick(projectId) {
-    selectedProjectId = projectId; // Store the selected project ID
-    console.log('Selected Project ID:', selectedProjectId); // For debugging
-    showProjectDetails(projectId); // Optionally, show project details
-}
-
-// Hide the create project button if not on the overview page
-function hideCreateProjectButton() {
-    document.getElementById('create-project-btn').style.display = 'block'; // Show button on the overview page
-}
-
-// script.js
-function includeHeader() {
-    fetch('header.html')
-        .then(response => response.text())
-        .then(data => {
-            document.getElementById('header').innerHTML = data;
+    // New: Search Functionality
+    searchInput.addEventListener('input', (e) => {
+        const searchTerm = e.target.value.toLowerCase();
+        const filteredProjects = projects.filter(project => 
+            project.projectName.toLowerCase().includes(searchTerm)
+        );
+        projectTableBody.innerHTML = '';
+        filteredProjects.forEach((project, index) => {
+            const row = document.createElement('tr');
+            row.innerHTML = `
+                <td>${index + 1}</td>
+                <td>${project.projectId}</td>
+                <td>${project.projectName}</td>
+                <td>${project.teamLead}</td>
+                ${project.phases.map(phase => `
+                    <td class="phase-box ${getPhaseClass(phase.status)}">
+                        ${phase.status === 'completed' ? '✔️' : '❌'}
+                    </td>
+                `).join('')}
+            `;
+            row.addEventListener('click', () => handleProjectClick(project.projectId));
+            projectTableBody.appendChild(row);
         });
-}
+    });
 
-function logout() {
-    // Logic to handle logout, e.g., clearing session data, redirecting to login page
-    // alert("Logging out...");
-    window.location.href = 'login.html';
-}
-
-function confirmLogout() {
-    const confirmationDialog = document.getElementById('confirmation-dialog');
-    confirmationDialog.style.display = 'block';
-}
-
-function cancelLogout() {
-    const confirmationDialog = document.getElementById('confirmation-dialog');
-    confirmationDialog.style.display = 'none';
-}
+    // Initial fetch of projects
+    displayProjects();
+});

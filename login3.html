@@ -7,83 +7,63 @@
     <title>Login System</title>
     <style>
         * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
+            margin: 0px;
+            padding: 0px;
         }
 
         body {
-    font-family: Arial, sans-serif;
-    height: 100vh;
-    margin: 0;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    background-color: pink;
-    background-image: url('2.jpg');
-    background-size: cover;
-    background-repeat: no-repeat;
-    background-position: center;
-    color: #ffffff;
-}
-
-.container {
-    width: 40%;
-    background-color: rgba(0, 0, 0, 0.7);
-    border-radius: 10px;
-    padding: 20px;
-    backdrop-filter: blur(10px);
-}
-
-
-        h1 {
-           
-            /* margin-bottom: 700px; */
-            /* margin-top: -300px; */
-            /* margin-left: 200px; */
-            font-size: 4rem;
-            text-shadow: 2px 2px 4px #000000;
-            
+            box-sizing: border-box;
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            background-image: url('4.jpg');
+            background-size: 100%;
+            background-repeat: no-repeat;
         }
 
-        label {
-            display: block;
-            margin-bottom: 8px;
-            font-weight: bold;
-            text-align:flex-start;
-        }
-
-        select, input {
-            width: 100%;
-            padding: 10px;
-            margin-bottom: 20px;
-            border: none;
-            border-radius: 5px;
-            background-color: #ffffff;
-            color: #000000;
-            font-size: 1rem;
+        .container {
+            display: flex;
+            justify-content: space-around;
+            width: 80%;
+            margin: 84px 0;
         }
 
         .form-section {
-            margin-bottom: 20px;
+            border: 1px solid #ccc;
+            padding: 20px;
+            border-radius: 8px;
+            width: 40%;
+            font-size: larger;
+            color: white;
         }
 
         .form-section h2 {
             text-align: center;
-            margin-bottom: 20px;
-            font-size: 1.5rem;
+        }
+
+        .form-section label {
+            display: block;
+            margin: 10px 0 5px;
+        }
+
+        .form-section input {
+            width: 100%;
+            padding: 8px;
+            margin-bottom: 10px;
+            box-sizing: border-box;
         }
 
         .form-section button {
             width: 100%;
-            padding: 12px;
+            padding: 10px;
             background-color: #4CAF50;
             color: white;
             border: none;
-            border-radius: 5px;
+            border-radius: 4px;
             cursor: pointer;
-            font-size: 1.2rem;
-            transition: background-color 0.3s ease, transform 0.3s ease;
         }
 
         .form-section button:hover {
@@ -95,69 +75,62 @@
             transform: scale(0.95);
         }
 
+        #register {
+            background-color: #4fc7e5;
+            color: black;
+            border-radius: 4px;
+            width: 176px;
+            height: 30px;
+        }
+
+        #register:hover {
+            background-color: #4CAF50;
+        }
+
+        #register1 {
+            background-color: #4fc7e5;
+            color: black;
+            border-radius: 4px;
+            width: 176px;
+            height: 30px;
+        }
+
+        #register1:hover {
+            background-color: #4CAF50;
+        }
+
+        h1 {
+            color: #FF7F50;
+        }
+
         .register {
             display: flex;
-            justify-content: center;
-            margin-top: 20px;
+            justify-content: space-around;
+            width: 80%;
+            margin: -50px 0;
         }
 
-        #registerButton {
-            background-color: #4fc7e5;
-            border-radius: 5px;
-            padding: 12px 20px;
-            color: azure;
-            font-size: 1rem;
-            cursor: pointer;
-            /* text-shadow: 0px 0px 3px #ff00ee; */
-            transition: background-color 0.3s ease, transform 0.3s ease;
-        }
-
-        #registerButton:hover {
-            background-color: #4CAF50;
+        .scaling:hover {
             transform: scale(1.05);
         }
 
-        #registerButton:active {
+        .scaling:active {
             transform: scale(0.95);
         }
-
-        #role {
-            width: 100%;
-            padding: 10px;
-            border-radius: 5px;
-            background-color: #4fc7e5;
-            color: white;
-            font-size: 1rem;
-        }
-
-        #responseMessage {
-            text-align: right;
-            margin-top: 20px;
-            font-size: 1rem;
-            color: red;
-        }
-        .maker-space{
-            
-    position: absolute;
-    top: 20px;
-    left: 50%;
-    transform: translateX(-50%);
-}
-
-        
     </style>
     <script>
         function updateForm() {
             const role = document.getElementById('role').value;
             const loginForm = document.getElementById('loginForm');
             const registerButton = document.getElementById('registerButton');
+            
 
             if (role === 'director') {
                 loginForm.innerHTML = `
                     <h2>DIRECTOR LOGIN</h2>
-                    <label for="directorName">USER NAME</label>
+                    <label for="directorName">User Name</label>
                     <input type="text" id="directorName" name="directorName" placeholder="Enter Name" required>
-                    <label for="directorPassword">PASSWORD</label>
+                    <label for="directorPassword">Password</label>
                     <input type="password" id="directorPassword" name="directorPassword" placeholder="Enter Password" required>
                     <button type="submit">Login</button>
                     <div id="responseMessage"></div>
@@ -167,9 +140,9 @@
             } else if (role === 'project') {
                 loginForm.innerHTML = `
                     <h2>MONITOR LOGIN</h2>
-                    <label for="projectName">USER NAME</label>
+                    <label for="projectName">User Name</label>
                     <input type="text" id="projectName" name="projectName" placeholder="Enter Name" required>
-                    <label for="projectPassword">PASSWORD</label>
+                    <label for="projectPassword">Password</label>
                     <input type="password" id="projectPassword" name="projectPassword" placeholder="Enter Password" required>
                     <button type="submit">Login</button>
                     <div id="responseMessage"></div>
@@ -179,9 +152,9 @@
             } else if (role === 'technical_officer') {
                 loginForm.innerHTML = `
                     <h2>TECHNICAL OFFICER LOGIN</h2>
-                    <label for="technicalOfficerName">USER NAME</label>
+                    <label for="technicalOfficerName">User Name</label>
                     <input type="text" id="technicalOfficerName" name="technicalOfficerName" placeholder="Enter Name" required>
-                    <label for="technicalOfficerPassword">PASSWORD</label>
+                    <label for="technicalOfficerPassword">Password</label>
                     <input type="password" id="technicalOfficerPassword" name="technicalOfficerPassword" placeholder="Enter Password" required>
                     <button type="submit">Login</button>
                     <div id="responseMessage"></div>
@@ -191,7 +164,7 @@
             }
 
             // Attach event listener for the login button
-            document.querySelector('.form-section button').addEventListener('click', function (event) {
+            document.querySelector('.form-section button').addEventListener('click', function(event) {
                 event.preventDefault();
                 login(role);
             });
@@ -226,6 +199,7 @@
                     } else if (role === 'technical_officer') {
                         window.location.href = 'tof.html';
                     }
+                    // window.location.href = redirectPage; // Redirect to the respective page
                 } else {
                     responseMessage.innerText = `Error: ${data.message}`;
                 }
@@ -239,20 +213,20 @@
 </head>
 
 <body>
-    <div class="maker-space"><h1><b>MAKER'S SPACE</b></h1></div>
+    <h1><b>MAKER SPACE</b></h1>
+    <label for="role">Select User Type:</label>
+    <select id="role" name="role" onchange="updateForm()">
+        <option value="director" id="director">Director Registration or Login</option>
+        <option value="project" id="project">Monitor Registration or Login</option>
+        <option value="technical_officer">Technical Officer Registration or Login</option>
+    </select>
     <div class="container">
-        <label for="role">SELECT USER TYPE:</label>
-        <select id="role" name="role" onchange="updateForm()">
-            <option value="director" id="director">DIRECTOR</option>
-            <option value="project" id="project">MONITOR</option>
-            <option value="technical_officer">TECHNICAL OFFICER</option>
-        </select>
         <form class="form-section" id="loginForm">
             <!-- Initial form content will be inserted here by JavaScript -->
         </form>
-        <div class="register">
-            <button id="registerButton" class="scaling">REGISTER FOR DIRECTOR</button>
-        </div>
+    </div>
+    <div class="register">
+        <button id="registerButton" class="scaling">REGISTER FOR DIRECTOR</button>
     </div>
 </body>
 

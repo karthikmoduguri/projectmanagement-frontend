@@ -133,6 +133,7 @@ document.addEventListener('DOMContentLoaded', function() {
                             if (updateResponse.ok) {
                                 console.log(`Phase ${update.phaseId} updated successfully:`, result);
                                 // Handle success, e.g., show a confirmation message
+                                
                             } else {
                                 console.error(`Error updating phase ${update.phaseId}:`, result);
                             }
