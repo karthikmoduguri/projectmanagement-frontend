@@ -2,6 +2,7 @@
 
 body {
     font-family: Arial, sans-serif;
+    background-color: #f8f9fa;
 }
 
 .container {
@@ -17,6 +18,11 @@ body {
     width: 100%;
     border-collapse: collapse;
     margin-top: 20px;
+
+}
+#projectTable:hover{
+    cursor: pointer;
+    /* transform: scale(1.05); */
 }
 
 #projectTable th, #projectTable td {
@@ -28,6 +34,7 @@ body {
 #projectTable th {
     background-color: #f4f4f4;
 }
+
 
 .phase-box {
     font-weight: bold;
@@ -113,4 +120,59 @@ body {
 
 #backButton:hover {
     background-color: #45a049;
+}
+
+.scaling:hover{
+    transform: scale(1.05);
+}
+.scaling:active{
+    transform: scale(0.95);
+}
+#addProjectBtn{
+    background-color: rgb(106, 244, 106);
+    border-radius: 0.3rem;
+    border: rgb(155, 243, 155);
+    /* color: ; */
+}
+#removeProjectBtn{
+    background-color: rgb(247, 107, 97);
+    border-radius: 0.3rem;
+    border: rgb(247, 107, 97);
+    /* color: white; */
+}
+#searchInput{
+    background-color: #BBE9FF;
+    color: black;
+    width: 170px;
+    border-radius: 0.3rem;
+    border:#BBE9FF ;
+    
+    
+}
+::placeholder{
+    color: black;
+    
+}
+#cancel-class{
+    border-radius: 0.3rem;
+}
+#create-project{
+    border-radius: 0.3rem;
+}
+#confirmLogoutBtn{
+    background-color: rgb(247, 107, 97);
+    color: white;
+    width: 50px;
+
+    height: 30px;
+    border:rgb(247, 107, 97) ;
+    border-radius: 0.3rem;
+}
+#cancelLogoutBtn{
+    background-color:rgb(106, 244, 106);
+    color: white;
+    width: 50px;
+    height: 30px;
+    border: rgb(106, 244, 106);
+    border-radius: 0.3rem;
 }

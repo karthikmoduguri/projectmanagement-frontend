@@ -35,7 +35,7 @@
         }
 
         #popupContent {
-            background-color: #D1E9F6;
+            background-color: white;
             padding: 20px;
             border-radius: 5px;
             text-align: center;
@@ -63,9 +63,7 @@
                 <input type="text" id="projectTitle" name="projectTitle" class="scaling" required placeholder="Enter title">
                 <label for="teamLead">TEAM LEAD:</label>
                 <input type="text" id="teamLead" name="teamLead" class="scaling" required placeholder="Enter team lead">
-                <button type="submit" class="scaling" id="create-project">CREATE PROJECT</button>
-                <button onclick="goBack()" class="scaling" id="cancel-class">CANCEL</button>
-
+                <button type="submit" class="scaling">CREATE PROJECT</button>
             </form>
         </div>
 
@@ -101,14 +99,24 @@
         <div id="popupModal">
             <div id="popupContent">
                 <p>Are you sure you want to log out?</p>
-                <button id="confirmLogoutBtn" >Yes</button>
+                <button id="confirmLogoutBtn">Yes</button>
                 <button id="cancelLogoutBtn">No</button>
             </div>
         </div>
     </div>
-    <div id="hoverDetails" style="position:absolute; display:none; background-color: white; border: 1px solid black; padding: 10px; z-index: 1000;"></div>
+    <script src="hoif.js"></script>
+    <script>
+        document.getElementById('logoutBtn').addEventListener('click', function() {
+            document.getElementById('popupModal').style.display = 'flex';
+        });
 
-    <script src="hoif3.js"></script>
-   
+        document.getElementById('confirmLogoutBtn').addEventListener('click', function() {
+            window.location.href = 'login.html';
+        });
+
+        document.getElementById('cancelLogoutBtn').addEventListener('click', function() {
+            document.getElementById('popupModal').style.display = 'none';
+        });
+    </script>
 </body>
 </html>

@@ -66,10 +66,27 @@ document.addEventListener('DOMContentLoaded', () => {
     removeProjectBtn.addEventListener('click', () => {
         const projectIdToRemove = prompt('Enter Project ID to remove:').trim();
         if (projectIdToRemove) {
-            console.log(projectIdToRemove)
-            projects = projects.filter(project => project.projectId !== parseInt(projectIdToRemove));
-            updateTable();
-
+            projects = projects.filter(project => project.projectId !== projectIdToRemove);
+            projectTableBody.innerHTML = '';
+        projects.forEach((project, index) => {
+            const row = document.createElement('tr');
+            row.innerHTML = `
+                <td>${index + 1}</td>
+                <td>${project.projectId}</td>
+                <td>${project.projectName}</td>
+                <td>${project.teamLead}</td>
+                  ${project.phases.length > 0 ? 
+                project.phases.map(phase => `
+                    <td class="phase-box ${getPhaseClass(phase.status)}">
+                        ${phase.status === 'completed' ? '✔️' : '❌'}
+                    </td>
+                `).join('') : 
+                '<td colspan="6">!!!Phases not created yet!!! </td>' // Adjust colspan based on your table structure
+            }
+            `;
+            row.addEventListener('click', () => handleProjectClick(project.projectId));
+            projectTableBody.appendChild(row);
+        });
         }
     });
 
@@ -115,8 +132,8 @@ document.addEventListener('DOMContentLoaded', () => {
             const projectDetails = await response.json();
             detailsContainer.innerHTML = `
                 <h3>Project ID: ${projectDetails.projectId}</h3>
-                <h3>Title: ${projectDetails.projectName}</h3>
-                <h3>Team Lead: ${projectDetails.teamLead}</h3>
+                <p>Title: ${projectDetails.projectName}</p>
+                <p>Team Lead: ${projectDetails.teamLead}</p>
             `;
             phaseBoxes.innerHTML = projectDetails.phases.map(phase => `
                 <div class="phase-box ${getPhaseClass(phase.status)}">
@@ -238,21 +255,3 @@ document.addEventListener('DOMContentLoaded', () => {
     // Initial fetch of projects
     displayProjects();
 });
-// hoif.js
-
-document.getElementById('logoutBtn').addEventListener('click', function() {
-    document.getElementById('popupModal').style.display = 'flex';
-});
-
-document.getElementById('confirmLogoutBtn').addEventListener('click', function() {
-    window.location.href = 'login.html';
-});
-
-document.getElementById('cancelLogoutBtn').addEventListener('click', function() {
-    document.getElementById('popupModal').style.display = 'none';
-});
-
-function goBack() {
-    window.location.reload();
-
-}
