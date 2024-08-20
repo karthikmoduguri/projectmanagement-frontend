@@ -176,3 +176,13 @@ body {
     border: rgb(106, 244, 106);
     border-radius: 0.3rem;
 }
+
+.blinking {
+    animation: blinkingBackground 1s infinite;
+}
+
+@keyframes blinkingBackground {
+    0% { background-color: transparent; }
+    50% { background-color: #6aeeff; }
+    100% { background-color: transparent; }
+}

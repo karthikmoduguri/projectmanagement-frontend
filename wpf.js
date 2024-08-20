@@ -46,6 +46,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 localStorage.setItem('projectMongoId', data._id);
                 console.log("hira")
                 showPhaseDetails()
+                
             }
             if (!response.ok) {
                 const error = await response.json();
