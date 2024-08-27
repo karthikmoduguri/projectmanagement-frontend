@@ -98,74 +98,89 @@ document.addEventListener('DOMContentLoaded', function() {
 
     document.getElementById('progress-form').addEventListener('submit', async function(event) {
         event.preventDefault();
-    
         const projectId = localStorage.getItem('projectMongoId');
         const token = localStorage.getItem('authToken');
-    
+
         if (projectId) {
             try {
-                // Fetch project data including phases
                 const response = await fetch(`http://localhost:3000/api/v1/projects/k/${projectId}`, {
                     method: 'GET',
                     headers: {
                         'Content-Type': 'application/json',
-                        'Authorization': `Bearer ${token}` // Include token if needed
+                        'Authorization': `Bearer ${token}`
                     }
                 });
-    
+
                 if (response.ok) {
                     const projectData = await response.json();
-                    console.log('Project Data:', projectData);
-                    console.log('Phases Data:', projectData.phases);
-    
-                  
-                // const phasesObject = projectData.phases; // Assuming phases is an object
-                const phasesArray = Object.values(projectData); // Convert to array of phase objects
+                    const phasesArray = Object.values(projectData);
 
-                const phaseUpdates = [];
-                const checkboxes = document.querySelectorAll('#progress-form input[type="checkbox"]:checked'); // Only selected checkboxes
+                    const phaseUpdates = [];
+                    const checkboxes = document.querySelectorAll('#progress-form input[type="checkbox"]:checked');
 
-                checkboxes.forEach(checkbox => {
-                    const phaseName = checkbox.name;
-                    const phase = phasesArray.find(p => p.name === phaseName);
-    
-                            if (phase) {
-                                phaseUpdates.push({
-                                    phaseId: phase._id,
-                                    status: 'completed',
-                                    completionDate: new Date().toLocaleString(),
-                                    isOnTime: true // Adjust based on your logic
-                                });
-                            }
-                        });
-                        console.log(phaseUpdates);
-                        // Send the phase updates to the server
-                        for (const update of phaseUpdates) {
-                            console.log('Processing update for phase ID:', update.phaseId);
-                            console.log("ayyindha")
-                            const updateResponse = await fetch(`http://localhost:3000/api/v1/phases/${update.phaseId}`, {
-                                method: 'PUT',
-                                headers: {
-                                    'Content-Type': 'application/json',
-                                    'Authorization': `Bearer ${token}` // Include token if needed
-                                },
-                                body: JSON.stringify({
-                                    status: update.status,
-                                    completionDate: update.completionDate,
-                                    isOnTime: update.isOnTime
-                                })
+                    checkboxes.forEach(checkbox => {
+                        const phaseName = checkbox.name;
+                        const phase = phasesArray.find(p => p.name === phaseName);
+
+                        if (phase) {
+                            const fileInput = document.getElementById(`${phaseName}-file`);
+                            const file = fileInput.files[0];
+
+                            // const formData = new FormData();
+                            if (file) {
+                                const formData = new FormData();
+                                console.log("file came")
+                                formData.append('file', file); // Append the file to the form data
+                            
+
+
+
+                            phaseUpdates.push({
+                                phaseId: phase._id,
+                                formData: formData,
+                                status: 'completed',
+                                completionDate: new Date().toLocaleString(),
+                                isOnTime: true 
                             });
-    
-                            const result = await updateResponse.json();
-                            if (updateResponse.ok) {
-                                console.log(`Phase ${update.phaseId} updated successfully:`, result);
-                                // Handle success, e.g., show a confirmation message
-                                
-                            } else {
-                                console.error(`Error updating phase ${update.phaseId}:`, result);
-                            }
                         }
-                    
+                        }
+                    });
+
+                    for (const update of phaseUpdates) {
+                        const updateResponse = await fetch(`http://localhost:3000/api/v1/phases/u/${update.phaseId}`, {
+                            method: 'PUT',
+                            headers: {
+                                'Authorization': `Bearer ${token}`
+                            },
+                            body: update.formData
+                        });
+
+                        const updateResponse2 = await fetch(`http://localhost:3000/api/v1/phases/${update.phaseId}`, {
+                            method: 'PUT',
+                            headers: {
+                                'Content-Type': 'application/json',
+                                'Authorization': `Bearer ${token}` // Include token if needed
+                            },
+                            body: JSON.stringify({
+                                status: update.status,
+                                completionDate: update.completionDate,
+                                isOnTime: update.isOnTime
+                            })
+                        });
+
+                        if (updateResponse.ok) {
+                            console.log(`Phase ${update.phaseId} updated successfully`);
+                        } else {
+                            console.error(`Error updating phase ${update.phaseId}:`, await updateResponse.json());
+                        }
+                        if (updateResponse2.ok) {
+                            console.log(`Phase ${update.phaseId} updated successfully`);
+                        } else {
+                            console.error(`Error updating phase ${update.phaseId}:`, await updateResponse2.json());
+                        }
+                    }
+
+                    popup.classList.remove('hidden');
                 } else {
                     console.error('Error fetching project data:', await response.json());
                 }
@@ -174,9 +189,7 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         } else {
             console.error('Project ID not found in localStorage');
-        }     
-
-
+        }
     });
     
     

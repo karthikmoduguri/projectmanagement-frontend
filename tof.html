@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Technical Officer Dashboard</title>
+    <link rel="stylesheet" href="tof.css">
+</head>
+<body>
+    <div class="sidebar">
+        <h2>Technical Officer</h2>
+        <a href="#" class="logout" id="logout">Logout</a>
+    </div>
+
+    <div class="main-content">
+        <div class="search-bar">
+            <input type="text" id="search-input" placeholder="Search Projects...">
+        </div>
+
+        <div class="project-list" id="project-list">
+            <!-- Project cards will be dynamically added here -->
+        </div>
+
+        <div class="project-details" id="project-details">
+            <!-- Project details will be dynamically populated here -->
+        </div>
+    </div>
+
+    <!-- Logout Confirmation Modal -->
+    <div class="modal" id="logout-modal">
+        <div class="modal-content">
+            <h3>Are you sure you want to logout?</h3>
+            <button class="btn-confirm" id="confirm-logout">Logout</button>
+            <button class="btn-cancel" id="cancel-logout">Cancel</button>
+        </div>
+    </div>
+
+    <!-- General Popup Modal -->
+    <div class="modal" id="general-modal">
+        <div class="modal-content">
+            <p id="general-modal-message"></p>
+            <button id="general-modal-ok">OK</button>
+        </div>
+    </div>
+
+    <!-- Report Modal -->
+ <!-- Report Modal -->
+<div class="modal" id="report-modal">
+    <div class="modal-content">
+        <h3>Submitted Report</h3>
+        <iframe id="report-iframe" style="width:100%; height:70vh; display:none;"></iframe>
+        <div id="report-content" style="display:none;"></div>
+        <button id="close-report">Close</button>
+    </div>
+</div>
+
+
+    <script src="tof.js"></script>
+</body>
+</html>

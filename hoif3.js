@@ -12,13 +12,14 @@ document.addEventListener('DOMContentLoaded', () => {
     const progressPercentage = document.getElementById('progressPercentage');
     const projectTable = document.getElementById('projectTable');
     const searchInput = document.getElementById('searchInput');
+    const cancel=document.getElementById('cancel-class')
     let projects = [];
 
     // Toggle Add Project Form
     addProjectBtn.addEventListener('click', () => {
         addProjectForm.classList.toggle('hidden');
     });
-
+    
     // Handle Project Form Submission
     projectForm.addEventListener('submit', async (e) => {
         e.preventDefault();
@@ -63,41 +64,50 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     // Handle Remove Project
-    removeProjectBtn.addEventListener('click', () => {
-        const projectIdToRemove = prompt('Enter Project ID to remove:').trim();
-        if (projectIdToRemove) {
-            projects = projects.filter(project => project.projectId !== projectIdToRemove);
-            projectTableBody.innerHTML = '';
-            projects.forEach((project, index) => {
-                const row = document.createElement('tr');
-                row.innerHTML = `
-                    <td>${index + 1}</td>
-                    <td>${project.projectId}</td>
-                    <td>${project.projectName}</td>
-                    <td>${project.teamLead}</td>
-                    ${project.phases.length > 0 ? 
-                        project.phases.map(phase => `
-                            <td class="phase-box ${getPhaseClass(phase.status)}">
-                                ${phase.status === 'completed' ? '✔️' : '❌'}
-                            </td>
-                        `).join('') : 
-                        '<td colspan="6">!!!Phases not created yet!!! </td>' // Adjust colspan based on your table structure
-                    }
-                `;
-                row.addEventListener('click', () => handleProjectClick(project.projectId));
-                projectTableBody.appendChild(row);
-            });
-        }
-    });
+    // Event listener for the remove project button (this button triggers the modal)
+document.getElementById('removeProjectBtn').addEventListener('click', function() {
+    // Open the remove project modal
+    $('#removeProjectModal').modal('show');
+});
 
-    
+// Event listener for the confirm remove button inside the modal
+document.getElementById('confirmRemoveProject').addEventListener('click', async function() {
+    const projectId = document.getElementById('removeProjectId').value;
+
+    if (projectId) {
+        try {
+            const response = await fetch(`http://localhost:3000/api/v1/projects/${projectId}`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${localStorage.getItem('authToken')}`
+                }
+            });
+
+            if (response.ok) {
+                alert('Project removed successfully!');
+                $('#removeProjectModal').modal('hide'); // Close the modal
+                displayProjects(); // Refresh the project list
+            } else {
+                const error = await response.json();
+                console.error('Error removing project:', error.message);
+                alert('Failed to remove project: ' + error.message);
+            }
+        } catch (error) {
+            console.error('Error:', error);
+            alert('An error occurred while removing the project.');
+        }
+    } else {
+        alert('Please enter a project ID.');
+    }
+});
 
 
     // Show Project Details
     async function showProjectDetails(project) {
         projectTable.classList.add('hidden');
         projectDetails.classList.remove('hidden');
-
+    
         try {
             const response = await fetch(`http://localhost:3000/api/v1/phases/p/${project.projectId}`, {
                 method: 'GET',
@@ -109,7 +119,6 @@ document.addEventListener('DOMContentLoaded', () => {
             if (response.ok) {
                 const data = await response.json();
                 localStorage.setItem('projectMongoId', data._id);
-                //showProjectDetails(data._id); // Call the function with the MongoDB ID
             } else {
                 const error = await response.json();
                 throw new Error(`Project fetch error: ${error.message}`);
@@ -127,17 +136,27 @@ document.addEventListener('DOMContentLoaded', () => {
                 'Authorization': `Bearer ${localStorage.getItem('authToken')}`
             }
         });
-
+    
         if (response.ok) {
             const projectDetails = await response.json();
             detailsContainer.innerHTML = `
                 <h3>Project ID: ${projectDetails.projectId}</h3>
-                <p>Title: ${projectDetails.projectName}</p>
-                <p>Team Lead: ${projectDetails.teamLead}</p>
+                <h3>Title: ${projectDetails.projectName}</h3>
+                <h3>Team Lead: ${projectDetails.teamLead}</h3>
             `;
-            phaseBoxes.innerHTML = projectDetails.phases.map(phase => `
+    
+            const phaseNames = [
+                "IDEATION",
+                "HARDWARE DEVELOPMENT",
+                "SOFTWARE INTEGRATION",
+                "DESIGN",
+                "MANUFACTURING & PRODUCTION",
+                "DEPLOYMENT & TESTING"
+            ];
+    
+            phaseBoxes.innerHTML = projectDetails.phases.map((phase, index) => `
                 <div class="phase-box ${getPhaseClass(phase.status)}" data-phase-id="${phase._id}">
-                    <p>${phase.name}</p>
+                    <p><strong>Phase Name:</strong> ${phaseNames[index]}</p>
                     <p>Monitor: ${phase.monitor}</p>
                     <p>Deadline: ${phase.deadline ? new Date(phase.deadline).toLocaleDateString('en-IN') : ""}</p>
                     <p><strong>Completion Date:</strong> ${phase.completionDate ? new Date(phase.completionDate).toLocaleDateString('en-IN') : ""}</p>
@@ -151,100 +170,6 @@ document.addEventListener('DOMContentLoaded', () => {
             const percentage = (completedPhases / totalPhases) * 100;
             progressBar.value = percentage;
             progressPercentage.textContent = `${percentage.toFixed(2)}%`;
-
-            // Hover Functionality for Phase Details
-           // Hover Functionality for Phase Details
-// Function to display phase details in a popup
-// function showPhaseDetailsPopup(details, x, y) {
-//     let popup = document.getElementById('phaseDetailsPopup');
-    
-//     if (popup) {
-//         popup.remove(); // Remove existing popup if it exists
-//     }
-
-//     // Create the popup div
-//     popup = document.createElement('div');
-//     popup.id = 'phaseDetailsPopup';
-//     popup.style.position = 'absolute';
-//     popup.style.left = `${x + 10}px`;
-//     popup.style.top = `${y + 10}px`;
-//     popup.style.backgroundColor = 'white';
-//     popup.style.border = '1px solid black';
-//     popup.style.padding = '10px';
-//     popup.style.zIndex = '1000';
-//     popup.style.boxShadow = '0px 0px 10px rgba(0,0,0,0.2)';
-
-//     // Fill the popup with phase details
-//     popup.innerHTML = `
-//         <strong>Phase Name:</strong> ${details.name || 'N/A'}<br>
-//         <strong>Monitor:</strong> ${details.monitor || 'N/A'}<br>
-//         <strong>Status:</strong> ${details.status || 'N/A'}<br>
-//         <strong>Completion Date:</strong> ${details.completionDate ? new Date(details.completionDate).toLocaleDateString('en-IN') : 'N/A'}<br>
-//         <strong>Deadline:</strong> ${details.deadline ? new Date(details.deadline).toLocaleDateString('en-IN') : 'N/A'}<br>
-//         <strong>Is On Time:</strong> ${details.isOnTime ? 'Yes' : 'No'}<br>
-//         <strong>Submission Time:</strong> ${details.timeDifference || 'N/A'}
-//     `;
-
-//     // Append the popup to the body
-//     document.body.appendChild(popup);
-// }
-
-// // Function to hide the popup
-// function hidePhaseDetailsPopup() {
-//     const popup = document.getElementById('phaseDetailsPopup');
-//     if (popup) {
-//         popup.remove();
-//     }
-// }
-
-// // Function to set the blinking effect
-// function setBlinkingEffect() {
-//     const phaseColumns = document.querySelectorAll('#projectTable td');
-
-//     phaseColumns.forEach((column, index) => {
-//         if (column.innerText === '✔') {
-//             const nextColumn = phaseColumns[index + 1];
-//             if (nextColumn && nextColumn.innerText.trim() === '') {
-//                 nextColumn.classList.add('blinking');
-//             }
-//         }
-//     });
-// }
-
-// // Event listeners for phase boxes
-// const phaseCells = document.querySelectorAll('#projectTableBody .phase-box');
-
-// phaseCells.forEach(cell => {
-//     cell.addEventListener('mouseenter', async (event) => {
-//         const phaseId = cell.getAttribute('data-phase-id'); // Correctly retrieving the phaseId
-//         const { clientX: x, clientY: y } = event; // Get mouse position
-
-//         if (phaseId) {
-//             try {
-//                 const phaseResponse = await fetch(`http://localhost:3000/api/v1/phases/m/${phaseId}`, {
-//                     method: 'GET',
-//                     headers: {
-//                         'Content-Type': 'application/json',
-//                         'Authorization': `Bearer ${localStorage.getItem('authToken')}`
-//                     }
-//                 });
-
-//                 if (phaseResponse.ok) {
-//                     const phaseDetails = await phaseResponse.json();
-//                     showPhaseDetailsPopup(phaseDetails, x, y); // Show popup with phase details
-//                 } else {
-//                     console.error('Error fetching phase details');
-//                 }
-//             } catch (error) {
-//                 console.error('Error fetching phase details:', error);
-//             }
-//         }
-//     });
-
-//     cell.addEventListener('mouseleave', () => {
-//         hidePhaseDetailsPopup(); // Hide the popup when the mouse leaves
-//     });
-// });
         } else {
             console.error('Error fetching project details');
             alert('Failed to load project details.');
@@ -267,7 +192,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 projectTableBody.innerHTML = '';
                 projects.forEach((project, index) => {
                     const row = document.createElement('tr');
-
+                    
                     let currentPhaseIndex = project.phases.findIndex(phase => phase.status !== 'completed');
                     if (currentPhaseIndex === -1) currentPhaseIndex = project.phases.length; // If all are completed, no blinking
                     row.innerHTML = `
@@ -277,159 +202,114 @@ document.addEventListener('DOMContentLoaded', () => {
                       <td>${project.teamLead}</td>
                       ${project.phases.length > 0 ? 
                         project.phases.map((phase, phaseIndex) => `
-                        <td class="phase-box ${getPhaseClass(phase.status)} ${phaseIndex === currentPhaseIndex ? 'blinking' : ''}" 
-                            data-phase-id="${phase._id}">
-                            ${phase.status === 'completed' ? '✅' : ''}
-                        </td>
+                          <td class="phase-box ${phaseIndex === currentPhaseIndex ? 'blinking' : getPhaseClass(phase.status)}">
+                              ${phase.status === 'completed' ? '✅' : ' '}
+                          </td>
                         `).join('') : 
-                        '<td colspan="6">!!!Phases not created yet!!! </td>' // Adjust colspan based on your table structure
-                    }
+                        '<td colspan="6">!!!Phases not created yet!!!</td>' // Adjust colspan based on your table structure
+                      }
+                      <td><button class="edit-project-btn" data-project-id="${project._id}">Edit</button></td>
                     `;
-
-                    function showPhaseDetailsPopup(details, x, y) {
-                        let popup = document.getElementById('phaseDetailsPopup');
-                        
-                        if (popup) {
-                            popup.remove(); // Remove existing popup if it exists
-                        }
-                    
-                        // Create the popup div
-                        popup = document.createElement('div');
-                        popup.id = 'phaseDetailsPopup';
-                        popup.style.position = 'absolute';
-                        popup.style.left = `${x + 10}px`;
-                        popup.style.top = `${y + 10}px`;
-                        popup.style.backgroundColor = 'white';
-                        popup.style.border = '1px solid black';
-                        popup.style.padding = '10px';
-                        popup.style.zIndex = '1000';
-                        popup.style.boxShadow = '0px 0px 10px rgba(0,0,0,0.2)';
-                    
-                        // Fill the popup with phase details
-                        popup.innerHTML = `
-                            <strong>Phase Name:</strong> ${details.name || 'N/A'}<br>
-                            <strong>Monitor:</strong> ${details.monitor || 'N/A'}<br>
-                            <strong>Status:</strong> ${details.status || 'N/A'}<br>
-                            <strong>Completion Date:</strong> ${details.completionDate ? new Date(details.completionDate).toLocaleDateString('en-IN') : 'N/A'}<br>
-                            <strong>Deadline:</strong> ${details.deadline ? new Date(details.deadline).toLocaleDateString('en-IN') : 'N/A'}<br>
-                            <strong>Is On Time:</strong> ${details.isOnTime ? 'Yes' : 'No'}<br>
-                            <strong>Submission Time:</strong> ${details.timeDifference || 'N/A'}
-                        `;
-                    
-                        // Append the popup to the body
-                        document.body.appendChild(popup);
-                    }
-                    
-                    // Function to hide the popup
-                    function hidePhaseDetailsPopup() {
-                        const popup = document.getElementById('phaseDetailsPopup');
-                        if (popup) {
-                            popup.remove();
-                        }
-                    }
-                    
-                    // Function to set the blinking effect
-                    function setBlinkingEffect() {
-                        const phaseColumns = document.querySelectorAll('#projectTable td');
-                    
-                        phaseColumns.forEach((column, index) => {
-                            if (column.innerText === '✔') {
-                                const nextColumn = phaseColumns[index + 1];
-                                if (nextColumn && nextColumn.innerText.trim() === '') {
-                                    nextColumn.classList.add('blinking');
-                                }
-                            }
-                        });
-                    }
-                    
-                    // Event listeners for phase boxes
-                    const phaseCells = document.querySelectorAll('#projectTableBody .phase-box');
-                    
-                    phaseCells.forEach(cell => {
-                        cell.addEventListener('mouseenter', async (event) => {
-                            const phaseId = cell.getAttribute('data-phase-id'); // Correctly retrieving the phaseId
-                            const { clientX: x, clientY: y } = event; // Get mouse position
-                    
-                            if (phaseId) {
-                                try {
-                                    const phaseResponse = await fetch(`http://localhost:3000/api/v1/phases/m/${phaseId}`, {
-                                        method: 'GET',
-                                        headers: {
-                                            'Content-Type': 'application/json',
-                                            'Authorization': `Bearer ${localStorage.getItem('authToken')}`
-                                        }
-                                    });
-                    
-                                    if (phaseResponse.ok) {
-                                        const phaseDetails = await phaseResponse.json();
-                                        showPhaseDetailsPopup(phaseDetails, x, y); // Show popup with phase details
-                                    } else {
-                                        console.error('Error fetching phase details');
-                                    }
-                                } catch (error) {
-                                    console.error('Error fetching phase details:', error);
-                                }
-                            }
-                        });
-                    
-                        cell.addEventListener('mouseleave', () => {
-                            hidePhaseDetailsPopup(); // Hide the popup when the mouse leaves
-                        });
-                    });
-
-
-
-
                     row.addEventListener('click', () => handleProjectClick(project.projectId));
                     projectTableBody.appendChild(row);
-
-                    
-
+                    // console.log(project._id);
                 });
+                // Attach Edit Button Event Listeners
+                // Event listener for the Edit button
+document.querySelectorAll('.edit-project-btn').forEach(button => {
+    button.addEventListener('click', function(event) {
+        event.preventDefault();
+        const projectId = this.getAttribute('data-project-id');
+
+        // Open the modal
+        $('#editProjectModal').modal('show');
+
+        // Save changes button logic
+        document.getElementById('saveChanges').addEventListener('click', async () => {
+            const projectName = document.getElementById('editProjectName').value;
+            const teamLead = document.getElementById('editTeamLead').value;
+
+            if (projectName || teamLead) {
+                try {
+                    const updateFields = {};
+                    if (projectName) updateFields.projectName = projectName;
+                    if (teamLead) updateFields.teamLead = teamLead;
+
+                    const response = await fetch(`http://localhost:3000/api/v1/projects/k2/${projectId}`, {
+                        method: 'PUT',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'Authorization': `Bearer ${localStorage.getItem('authToken')}`
+                        },
+                        body: JSON.stringify(updateFields)
+                    });
+
+                    if (response.ok) {
+                        alert('Project updated successfully!');
+                        $('#editProjectModal').modal('hide'); // Close the modal
+                        displayProjects(); // Refresh the project list
+                    } else {
+                        const error = await response.json();
+                        console.error('Error updating project:', error.message);
+                        alert('Failed to update project: ' + error.message);
+                    }
+                } catch (error) {
+                    console.error('Error:', error);
+                    alert('An error occurred while updating the project.');
+                }
             } else {
-                console.error('Error fetching projects');
+                alert('Please fill in at least one field.');
+            }
+        }, { once: true }); // Ensure the event listener is attached only once
+    });
+});
+
+            } else {
+                const error = await response.json();
+                console.error('Error fetching projects:', error.message);
+                alert('Failed to load projects.');
             }
         } catch (error) {
             console.error('Error:', error);
+            alert('An error occurred while loading projects.');
         }
     }
 
-    // Back Button Event
+    function getPhaseClass(status) {
+        return status === 'completed' ? 'completed' : 'in-progress';
+    }
+
+    function handleProjectClick(projectId) {
+        const project = projects.find(p => p.projectId === projectId);
+        if (project) {
+            showProjectDetails(project);
+        } else {
+            console.error('Project not found');
+            alert('Project not found.');
+        }
+    }
+
     backButton.addEventListener('click', () => {
-        projectDetails.classList.add('hidden');
         projectTable.classList.remove('hidden');
+        projectDetails.classList.add('hidden');
+        detailsContainer.innerHTML = '';
+        phaseBoxes.innerHTML = '';
+    });
+    cancel.addEventListener('click', () => {
+        projectTable.classList.remove('hidden');
+        projectDetails.classList.add('hidden');
+        detailsContainer.innerHTML = '';
+        phaseBoxes.innerHTML = '';
     });
 
-    // Search Functionality
     searchInput.addEventListener('input', () => {
-        const searchTerm = searchInput.value.toLowerCase().trim();
-        const rows = projectTableBody.querySelectorAll('tr');
-        rows.forEach(row => {
-            const projectId = row.cells[1].textContent.toLowerCase();
-            const projectName = row.cells[2].textContent.toLowerCase();
-            const teamLead = row.cells[3].textContent.toLowerCase();
-
-            if (projectId.includes(searchTerm) || projectName.includes(searchTerm) || teamLead.includes(searchTerm)) {
-                row.style.display = '';
-            } else {
-                row.style.display = 'none';
-            }
+        const searchTerm = searchInput.value.toLowerCase();
+        projectTableBody.querySelectorAll('tr').forEach(row => {
+            const projectName = row.querySelector('td:nth-child(3)').textContent.toLowerCase();
+            row.style.display = projectName.includes(searchTerm) ? '' : 'none';
         });
     });
 
-    // Fetch projects and populate the table on page load
+    // Initial load of projects
     displayProjects();
-    
-    // Get phase box class based on status
-    function getPhaseClass(status) {
-        return status === 'completed' ? 'completed' : 'not-completed';
-    }
-
-    // Handle project row click to show project details
-    function handleProjectClick(projectId) {
-        const selectedProject = projects.find(project => project.projectId === projectId);
-        if (selectedProject) {
-            showProjectDetails(selectedProject);
-        }
-    }
 });
